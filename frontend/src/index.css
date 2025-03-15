@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dark-tile: #779556;
+  --color-light-tile: #ebecd0;
+  --color-background: #302e2b;
+  --color-navbar: #262522;
+  --color-dark-button: #21201d;
+  --color-green-button: #81b64c;
+  --color-green-button-hover: #a0cd5e;
+  --color-dark-button-hover: #3b3936;
+}
