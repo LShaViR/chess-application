@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, Users, HelpCircle, LogOut, Globe } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const NavItem: React.FC<{

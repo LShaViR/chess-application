@@ -10,7 +10,7 @@ const Home = () => {
         <SideNavbar />
       </div>
       <div className="col-span-10 bg-background grid justify-center items-center">
-        <img src="public/chessBoard.png" alt="" />
+        <img src="/chessBoard.png" alt="" />
       </div>
       <div className="col-span-10 bg-background flex flex-col items-center justify-center p-6">
         <div className="text-center mb-12">
