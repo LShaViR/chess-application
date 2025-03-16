@@ -1,16 +1,24 @@
 //// @ts-nocheck
 import { useEffect, useRef, useState } from "react";
 import { PiecesProps } from "../utils/types";
-import { BLACK, WHITE } from "../utils/constant";
+import { BLACK, filesArr } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import Piece from "./ui/Piece";
 import {
+  clearActivePiece,
   clearCandidates,
   promotionUpdate,
 } from "../store/features/playGameSlice";
-import { findSquare, isValidMove } from "../utils/helper";
-import { PieceColor, PieceType, ShortMove, Square } from "chess.js";
+import { findSquare, isPromotion, isValidMove } from "../utils/helper";
+import {
+  ChessInstance,
+  PieceColor,
+  PieceType,
+  ShortMove,
+  Square,
+} from "chess.js";
+
 const Pieces = ({ turn }: PiecesProps) => {
   const chess = useSelector((state: RootState) => state.game.value?.chess);
   const ref = useRef<HTMLDivElement>(null);
@@ -28,62 +36,47 @@ const Pieces = ({ turn }: PiecesProps) => {
     setBoard(chess.board());
   }, []);
 
-  const calculateCordinate = (e: React.DragEvent): number[] => {
-    const element = ref.current;
-    const cords: { top: number; left: number; width: number } | undefined =
-      element?.getBoundingClientRect();
-
-    if (cords) {
-      const size = cords.width / 8;
-      const x = Math.floor((e.clientX - cords.left) / size);
-      const y = Math.floor(8 - (e.clientY - cords.top) / size);
-      return [x, y];
-    }
-    return [];
-  };
-
-  const move = (e: React.DragEvent) => {
+  const makeMove = (move: ShortMove, chess: ChessInstance) => {
     console.log("move1");
-    const [_piece, fromSquare] = e.dataTransfer.getData("text").split(",");
-    const [x, y] = calculateCordinate(e);
-    const toSquare = findSquare(x, y, turn);
-    console.log("move2");
-    if (isValidMove({ from: fromSquare, to: toSquare }, playGame?.candidates)) {
+    if (isValidMove(move, chess.moves({ square: move.from, verbose: true }))) {
       console.log("move3");
-      if (
-        chess
-          .moves({ verbose: true, square: fromSquare })
-          .reduce(
-            (promotion, current) =>
-              promotion ||
-              (current.promotion ? true : false && current.to == toSquare),
-            false
-          )
-      ) {
+      if (isPromotion(chess, move)) {
         console.log("move4");
         dispatch(
           promotionUpdate({
-            file: turn == WHITE ? x : 7 - x,
-            rank: turn == WHITE ? y : 7 - y,
-            from: fromSquare,
-            to: toSquare,
+            file: filesArr.indexOf(move.to[0]),
+            rank: Number(move.to[1]),
           })
         );
         console.log("move5");
         return;
       }
       console.log("move6");
-      chess.move({ from: fromSquare, to: toSquare } as ShortMove);
+      chess.move(move);
       setBoard(chess.board());
     }
     dispatch(clearCandidates());
+    dispatch(clearActivePiece());
   };
 
   const onDrop = (e: React.DragEvent) => {
     console.log("onDrop1");
     e.preventDefault();
-    move(e);
+    const [_piece, fromSquare] = e.dataTransfer.getData("text").split(",");
+    const toSquare = findSquare(e, ref.current, turn) || fromSquare;
+    const move = { from: fromSquare as Square, to: toSquare as Square };
+    makeMove(move, chess);
     console.log("onDrop2");
+  };
+
+  const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const fromSquare = playGame?.activePiece;
+    if (!fromSquare) {
+      return;
+    }
+    const toSquare = findSquare(e, ref.current, turn) || fromSquare;
+    const move = { from: fromSquare as Square, to: toSquare as Square };
+    makeMove(move, chess);
   };
 
   const onDragOver = (e: React.DragEvent) => {
@@ -95,25 +88,23 @@ const Pieces = ({ turn }: PiecesProps) => {
       className="w-full aspect-square absolute left-0 top-0 grid grid-cols-8 grid-rows-8"
       onDrop={onDrop}
       onDragOver={onDragOver}
+      onClick={onClick}
       ref={ref}
     >
       {board.map((row, ri) =>
         row.map((_col, ci) => {
-          let rowI = ri;
-          let colI = ci;
-          if (turn == BLACK) {
-            rowI = board.length - ri - 1;
-            colI = board.length - ci - 1;
-          }
+          let rowI = turn == BLACK ? board.length - ri - 1 : ri;
+          let colI = turn == BLACK ? board.length - ci - 1 : ci;
+
           if (board[rowI][colI]?.color && board[rowI][colI]?.type) {
+            const piece =
+              (board[rowI][colI]?.color || "") +
+              (board[rowI][colI]?.type || "");
             return (
               <Piece
                 key={ri * 8 + ci}
-                ri={ri}
-                ci={ci}
                 turn={turn}
-                color={board[rowI][colI]!.color}
-                type={board[rowI][colI]!.type}
+                piece={piece}
                 square={board[rowI][colI]!.square}
                 chess={chess}
               />

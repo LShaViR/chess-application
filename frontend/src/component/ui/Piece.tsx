@@ -1,48 +1,56 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { useDispatch } from "react-redux";
 import { ChessInstance, Square } from "chess.js";
 import {
   clearCandidates,
   generateCandidates,
+  setActivePiece,
 } from "../../store/features/playGameSlice";
+import { BLACK, filesArr, WHITE } from "../../utils/constant";
 
 const Piece = ({
-  ri,
-  ci,
   turn,
-  color,
-  type,
+  piece,
   square,
   chess,
 }: {
-  ri: number;
-  ci: number;
   turn: "w" | "b";
-  color: string;
-  type: string;
+  piece: string;
   square: Square;
   chess: ChessInstance;
 }) => {
-  const piece = color + type;
+  const ci =
+    turn == WHITE
+      ? filesArr.indexOf(square[0])
+      : 7 - filesArr.indexOf(square[0]);
+  const ri = turn == BLACK ? Number(square[1]) - 1 : 8 - Number(square[1]);
+
   const dispatch = useDispatch();
 
+  const actPiece = () => {
+    if (piece[0] === turn) {
+      const candidates = chess.moves({ square, verbose: true });
+      dispatch(setActivePiece({ activePiece: square }));
+      dispatch(generateCandidates({ candidates }));
+      console.log("onDragStart5");
+    }
+  };
+
+  const onClick: React.MouseEventHandler<HTMLDivElement> = (
+    _e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    actPiece();
+  };
+
   const onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    console.log("onDragStart1");
+    console.log("drag");
 
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/plain", `${piece},${square}`);
     const element = e.target as HTMLElement;
-    console.log("onDragStart2");
     setTimeout(() => {
       element.style.display = "none";
     }, 0);
-    console.log("onDragStart3", piece);
-    if (piece[0] === turn) {
-      console.log("onDragStart4");
-      const candidates = chess.moves({ square, verbose: true });
-      dispatch(generateCandidates({ candidates }));
-      console.log("onDragStart5");
-    }
+    actPiece();
   };
   const onDragEnd = (e: React.DragEvent) => {
     console.log("onDragEnd1");
@@ -53,10 +61,10 @@ const Piece = ({
   };
   return (
     <div
-      className={`w-full h-full z-10 ${color ? `cursor-grab` : ""}
+      className={`w-full h-full z-10 ${piece ? `cursor-grab` : ""}
       `}
       style={{
-        backgroundImage: color ? `url('/assets/${color}${type}.png')` : "",
+        backgroundImage: piece ? `url('/assets/${piece}.png')` : "",
         gridRowStart: ri + 1,
         gridColumnStart: ci + 1,
         backgroundSize: "100%",
@@ -65,6 +73,7 @@ const Piece = ({
       draggable={true}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
+      onClick={onClick}
     ></div>
   );
 };
