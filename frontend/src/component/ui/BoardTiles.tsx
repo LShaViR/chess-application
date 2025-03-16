@@ -1,8 +1,15 @@
+import { useSelector } from "react-redux";
 import { WHITE } from "../../utils/constant";
 import { BoardTilesProps } from "../../utils/types";
+import { RootState } from "../../store/store";
 
 const BoardTiles = ({ turn }: BoardTilesProps) => {
   const size = 8; // Standard chess board
+  const playGame = useSelector((state: RootState) => state.playGame.value);
+  const chess = useSelector((state: RootState) => state.game.value?.chess);
+  console.log(playGame?.candidates);
+  console.log("boardTiles");
+  console.log(chess?.board());
 
   const renderBoard = () => {
     const squares = [];
@@ -20,6 +27,7 @@ const BoardTiles = ({ turn }: BoardTilesProps) => {
             left: "1px",
             top: `calc(${row} * 12.5%)`,
           }}
+          draggable={false}
         >
           {rankNumber}
         </div>
@@ -34,6 +42,7 @@ const BoardTiles = ({ turn }: BoardTilesProps) => {
             className={`w-full h-full row-start-${row + 1} col-start-${
               col + 1
             } ${isBlack ? "bg-dark-tile" : "bg-light-tile"}`}
+            draggable={false}
           />
         );
       }
@@ -56,6 +65,7 @@ const BoardTiles = ({ turn }: BoardTilesProps) => {
             bottom: "0px",
             transform: "translateX(-120%)",
           }}
+          draggable={false}
         >
           {fileLabel}
         </div>

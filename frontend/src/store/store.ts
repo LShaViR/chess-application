@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import counterReducer from "./features/counterSlice";
-import boardReducer from "./features/boardSlice";
+import gameReducer from "./features/gameSlice";
+import playGameReducer from "./features/playGameSlice";
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
-    board: boardReducer,
+    game: gameReducer,
+    playGame: playGameReducer,
   },
 });
 
