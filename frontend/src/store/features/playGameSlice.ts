@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { MoveType } from "../../utils/types";
-import { ShortMove } from "chess.js";
-import { useSelector } from "react-redux";
 
 export interface PlayGameState {
   value: {
@@ -10,14 +8,12 @@ export interface PlayGameState {
     activePiece: string;
     promotion?: { file: number; rank: number } | undefined;
     gameEnd: "w" | "b" | "draw" | "";
-    timer: { player1: number; player2: number };
   } | null;
 }
 
 const initialState: PlayGameState = {
   value: null,
 };
-const game = useSelector;
 
 export const playGameSlice = createSlice({
   name: "playGame",
@@ -30,10 +26,25 @@ export const playGameSlice = createSlice({
         activePiece: string;
         promotion?: { file: number; rank: number } | undefined;
         gameEnd: "w" | "b" | "draw" | "";
-        timer: { player1: number; player2: number };
       }>
     ) => {
       state.value = action.payload;
+    },
+    setActivePiece: (state, action: PayloadAction<{ activePiece: string }>) => {
+      if (state.value) {
+        state.value = {
+          ...state.value,
+          activePiece: action.payload.activePiece,
+        };
+      }
+    },
+    clearActivePiece: (state) => {
+      if (state.value) {
+        state.value = {
+          ...state.value,
+          activePiece: "",
+        };
+      }
     },
     generateCandidates: (
       state,
@@ -55,8 +66,6 @@ export const playGameSlice = createSlice({
       action: PayloadAction<{
         file: number;
         rank: number;
-        from: string;
-        to: string;
       }>
     ) => {
       if (state.value)
@@ -77,6 +86,8 @@ export const {
   clearCandidates,
   promotionAction,
   promotionUpdate,
+  setActivePiece,
+  clearActivePiece,
 } = playGameSlice.actions;
 
 export default playGameSlice.reducer;

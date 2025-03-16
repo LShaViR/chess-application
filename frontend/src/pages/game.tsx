@@ -1,40 +1,12 @@
-import { useEffect, useState } from "react";
 import ChessBoard from "../component/ChessBoard";
 import Navbar from "../component/navbar";
-import { useDispatch, useSelector } from "react-redux";
-import { newGame } from "../store/features/gameSlice";
-import { newPlayGame } from "../store/features/playGameSlice";
-import { Chess } from "chess.js";
 import { Loader } from "lucide-react";
-import { RootState } from "../store/store";
+import useStartGame from "../hooks/useStartGame";
 
 const Game = () => {
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(true);
-  const game = useSelector((state: RootState) => state.game.value);
-  useEffect(() => {
-    dispatch(
-      newGame({
-        player1: "",
-        player2: "",
-        turn: "b",
-        gameStatus: "running",
-        gameId: "",
-        chess: new Chess(),
-      })
-    );
-    dispatch(
-      newPlayGame({
-        candidates: [],
-        activePiece: "",
-        gameEnd: "",
-        timer: { player1: 10, player2: 10 },
-      })
-    );
-    setLoading(false);
-  }, []);
+  const { loading, turn } = useStartGame();
 
-  if (loading || !game) {
+  if (loading || !turn) {
     return <Loader />;
   }
 
@@ -49,7 +21,7 @@ const Game = () => {
             <div className="grid grid-rows-12 grid-cols-1 h-screen  max-w-xl w-full">
               <div className=" row-span-1"></div>
               <div className="row-span-10 flex flex-col justify-center w-full">
-                <ChessBoard turn={game.turn} />
+                <ChessBoard turn={turn} />
               </div>
               <div className=" row-span-1"></div>
             </div>

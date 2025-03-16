@@ -5,11 +5,10 @@ import { RootState } from "../../store/store";
 
 const BoardTiles = ({ turn }: BoardTilesProps) => {
   const size = 8; // Standard chess board
+
+  //TODO: make hook and write logic for candidates
   const playGame = useSelector((state: RootState) => state.playGame.value);
-  const chess = useSelector((state: RootState) => state.game.value?.chess);
-  console.log(playGame?.candidates);
-  console.log("boardTiles");
-  console.log(chess?.board());
+  // const chess = useSelector((state: RootState) => state.game.value?.chess);
 
   const renderBoard = () => {
     const squares = [];
@@ -27,7 +26,6 @@ const BoardTiles = ({ turn }: BoardTilesProps) => {
             left: "1px",
             top: `calc(${row} * 12.5%)`,
           }}
-          draggable={false}
         >
           {rankNumber}
         </div>
@@ -36,14 +34,32 @@ const BoardTiles = ({ turn }: BoardTilesProps) => {
       // Chess squares for this row
       for (let col = 0; col < size; col++) {
         const isBlack = (row + col) % 2 === 1;
+
+        const fileLabel = String.fromCharCode(
+          97 + (turn == WHITE ? col : size - col - 1)
+        );
+        const square = fileLabel + rankNumber;
         squares.push(
           <div
             key={`${row}-${col}`}
-            className={`w-full h-full row-start-${row + 1} col-start-${
+            className={`relative w-full h-full row-start-${row + 1} col-start-${
               col + 1
-            } ${isBlack ? "bg-dark-tile" : "bg-light-tile"}`}
-            draggable={false}
-          />
+            } ${isBlack ? "bg-dark-tile" : "bg-light-tile"}
+            `}
+          >
+            {playGame?.candidates.reduce(
+              (agg, current) => agg || current.to == square,
+              false
+            ) ? (
+              <div
+                className={` absolute w-[30%] h-[30%] bg-${
+                  isBlack ? "dark" : "light"
+                }-tile-highlight rounded-full left-[35%] top-[35%] content-[''] `}
+              ></div>
+            ) : (
+              <></>
+            )}
+          </div>
         );
       }
     }
@@ -65,7 +81,6 @@ const BoardTiles = ({ turn }: BoardTilesProps) => {
             bottom: "0px",
             transform: "translateX(-120%)",
           }}
-          draggable={false}
         >
           {fileLabel}
         </div>

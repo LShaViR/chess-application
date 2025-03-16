@@ -9,6 +9,10 @@ export const store = configureStore({
     game: gameReducer,
     playGame: playGameReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, // Disables the warning completely
+    }),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

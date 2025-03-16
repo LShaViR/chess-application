@@ -1,11 +1,27 @@
+import { ChessInstance, Square } from "chess.js";
 import { filesArr, ranks } from "./constant";
 import { MoveType } from "./types";
 
-export const findSquare = (x: number, y: number, turn: "w" | "b") => {
-  if (turn == "b") {
-    return filesArr[7 - x] + ranks[7 - y];
+export const findSquare = (
+  e: any,
+  element: HTMLDivElement | null,
+  turn: "w" | "b"
+) => {
+  const cords: { top: number; left: number; width: number } | undefined =
+    element?.getBoundingClientRect();
+
+  if (cords) {
+    const size = cords.width / 8;
+    const x = Math.floor((e.clientX - cords.left) / size);
+    const y = Math.floor(8 - (e.clientY - cords.top) / size);
+
+    if (turn == "b") {
+      return filesArr[7 - x] + ranks[7 - y];
+    } else {
+      return filesArr[x] + ranks[y];
+    }
   } else {
-    return filesArr[x] + ranks[y];
+    return null;
   }
 };
 
@@ -21,4 +37,17 @@ export const isValidMove = (move: MoveType, candidates?: MoveType[]) => {
     }
   });
   return ans;
+};
+
+export const isPromotion = (
+  chess: ChessInstance,
+  { from, to }: { from: Square; to: Square }
+) => {
+  return chess
+    .moves({ verbose: true, square: from })
+    .reduce(
+      (promotion, current) =>
+        promotion || (current.promotion ? true : false && current.to == to),
+      false
+    );
 };
