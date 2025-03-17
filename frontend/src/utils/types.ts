@@ -1,15 +1,15 @@
-import { PieceType } from "chess.js";
+import { PieceColor, PieceType, Square } from "chess.js";
 
 export type BoardTilesProps = {
-  turn: "w" | "b";
+  orientation: "w" | "b";
 };
 
 export type ChessBoardProps = {
-  turn: "w" | "b";
+  orientation: "w" | "b";
 };
 
 export type PiecesProps = {
-  turn: "w" | "b";
+  orientation: "w" | "b";
 };
 
 export enum Color {
@@ -29,3 +29,9 @@ export type MoveType = {
   to: string;
   promotion?: Exclude<PieceType, "p" | "k"> | undefined;
 };
+
+export type BoardType = ({
+  type: PieceType;
+  color: PieceColor;
+  square: Square;
+} | null)[][];

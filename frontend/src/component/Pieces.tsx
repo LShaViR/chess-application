@@ -1,66 +1,25 @@
 //// @ts-nocheck
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { PiecesProps } from "../utils/types";
-import { BLACK, filesArr } from "../utils/constant";
-import { useDispatch, useSelector } from "react-redux";
+import { BLACK } from "../utils/constant";
+import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import Piece from "./ui/Piece";
-import {
-  clearActivePiece,
-  clearCandidates,
-  promotionUpdate,
-} from "../store/features/playGameSlice";
-import { findSquare, isPromotion, isValidMove } from "../utils/helper";
-import {
-  ChessInstance,
-  PieceColor,
-  PieceType,
-  ShortMove,
-  Square,
-} from "chess.js";
+import { findSquare } from "../utils/helper";
+import { Square } from "chess.js";
+import useMakeMove from "../hooks/useMakeMove";
 
-const Pieces = ({ turn }: PiecesProps) => {
+const Pieces = ({ orientation }: PiecesProps) => {
   const chess = useSelector((state: RootState) => state.game.value?.chess);
+  const turn = useSelector((state: RootState) => state.game.value?.turn);
   const ref = useRef<HTMLDivElement>(null);
-  const [board, setBoard] = useState<
-    ({ type: PieceType; color: PieceColor; square: Square } | null)[][]
-  >(new Array(8).fill(new Array(8).fill(null)));
   const playGame = useSelector((state: RootState) => state.playGame.value);
-  const dispatch = useDispatch();
+  const board = playGame?.board;
+  const makeMove = useMakeMove();
 
-  if (!chess) {
+  if (!chess || !board || !turn) {
     return <></>;
   }
-
-  useEffect(() => {
-    setBoard(chess.board());
-  }, []);
-
-  const makeMove = (move: ShortMove, chess: ChessInstance) => {
-    console.log("move1");
-    if (
-      turn == chess.turn() &&
-      isValidMove(move, chess.moves({ square: move.from, verbose: true }))
-    ) {
-      console.log("move3");
-      if (isPromotion(chess, move)) {
-        console.log("move4");
-        dispatch(
-          promotionUpdate({
-            file: filesArr.indexOf(move.to[0]),
-            rank: Number(move.to[1]),
-          })
-        );
-        console.log("move5");
-        return;
-      }
-      console.log("move6");
-      chess.move(move);
-      setBoard(chess.board());
-    }
-    dispatch(clearCandidates());
-    dispatch(clearActivePiece());
-  };
 
   const onDrop = (e: React.DragEvent) => {
     console.log("onDrop1");
@@ -68,7 +27,7 @@ const Pieces = ({ turn }: PiecesProps) => {
     const [_piece, fromSquare] = e.dataTransfer.getData("text").split(",");
     const toSquare = findSquare(e, ref.current, turn) || fromSquare;
     const move = { from: fromSquare as Square, to: toSquare as Square };
-    makeMove(move, chess);
+    makeMove(move, chess, turn);
     console.log("onDrop2");
   };
 
@@ -79,7 +38,7 @@ const Pieces = ({ turn }: PiecesProps) => {
     }
     const toSquare = findSquare(e, ref.current, turn) || fromSquare;
     const move = { from: fromSquare as Square, to: toSquare as Square };
-    makeMove(move, chess);
+    makeMove(move, chess, turn);
   };
 
   const onDragOver = (e: React.DragEvent) => {
@@ -96,8 +55,8 @@ const Pieces = ({ turn }: PiecesProps) => {
     >
       {board.map((row, ri) =>
         row.map((_col, ci) => {
-          let rowI = turn == BLACK ? board.length - ri - 1 : ri;
-          let colI = turn == BLACK ? board.length - ci - 1 : ci;
+          let rowI = orientation == BLACK ? board.length - ri - 1 : ri;
+          let colI = orientation == BLACK ? board.length - ci - 1 : ci;
 
           if (board[rowI][colI]?.color && board[rowI][colI]?.type) {
             const piece =

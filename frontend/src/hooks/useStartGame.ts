@@ -6,6 +6,8 @@ import { Chess } from "chess.js";
 import { RootState } from "../store/store";
 
 const useStartGame = () => {
+  console.log("india");
+
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const game = useSelector((state: RootState) => state.game.value);
@@ -26,6 +28,7 @@ const useStartGame = () => {
         candidates: [],
         activePiece: "",
         gameEnd: "",
+        board: new Chess().board(),
       })
     );
 

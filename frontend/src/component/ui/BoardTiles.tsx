@@ -3,7 +3,7 @@ import { WHITE } from "../../utils/constant";
 import { BoardTilesProps } from "../../utils/types";
 import { RootState } from "../../store/store";
 
-const BoardTiles = ({ turn }: BoardTilesProps) => {
+const BoardTiles = ({ orientation }: BoardTilesProps) => {
   const size = 8; // Standard chess board
 
   //TODO: make hook and write logic for candidates
@@ -14,7 +14,7 @@ const BoardTiles = ({ turn }: BoardTilesProps) => {
     const squares = [];
 
     for (let row = 0; row < size; row++) {
-      const rankNumber = turn == WHITE ? size - row : row + 1;
+      const rankNumber = orientation == WHITE ? size - row : row + 1;
       const isBlack = row % 2 != 0;
       squares.push(
         <div
@@ -36,7 +36,7 @@ const BoardTiles = ({ turn }: BoardTilesProps) => {
         const isBlack = (row + col) % 2 === 1;
 
         const fileLabel = String.fromCharCode(
-          97 + (turn == WHITE ? col : size - col - 1)
+          97 + (orientation == WHITE ? col : size - col - 1)
         );
         const square = fileLabel + rankNumber;
 
@@ -83,7 +83,7 @@ const BoardTiles = ({ turn }: BoardTilesProps) => {
     // Files (letters a-h) at the bottom
     for (let col = 0; col < size; col++) {
       const fileLabel = String.fromCharCode(
-        97 + (turn == WHITE ? col : size - col - 1)
+        97 + (orientation == WHITE ? col : size - col - 1)
       );
       const isBlack = col % 2 == 0;
       squares.push(
