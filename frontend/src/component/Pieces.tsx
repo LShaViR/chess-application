@@ -38,7 +38,10 @@ const Pieces = ({ turn }: PiecesProps) => {
 
   const makeMove = (move: ShortMove, chess: ChessInstance) => {
     console.log("move1");
-    if (isValidMove(move, chess.moves({ square: move.from, verbose: true }))) {
+    if (
+      turn == chess.turn() &&
+      isValidMove(move, chess.moves({ square: move.from, verbose: true }))
+    ) {
       console.log("move3");
       if (isPromotion(chess, move)) {
         console.log("move4");

@@ -28,6 +28,7 @@ const useStartGame = () => {
         gameEnd: "",
       })
     );
+
     setLoading(false);
   }, []);
   return { loading, turn: game?.turn };

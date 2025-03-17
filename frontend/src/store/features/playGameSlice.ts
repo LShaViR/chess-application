@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { MoveType } from "../../utils/types";
+import { Move } from "chess.js";
 
 export interface PlayGameState {
   value: {
-    candidates: MoveType[];
+    candidates: Move[];
     activePiece: string;
     promotion?: { file: number; rank: number } | undefined;
     gameEnd: "w" | "b" | "draw" | "";
@@ -22,7 +22,7 @@ export const playGameSlice = createSlice({
     newPlayGame: (
       state,
       action: PayloadAction<{
-        candidates: MoveType[];
+        candidates: Move[];
         activePiece: string;
         promotion?: { file: number; rank: number } | undefined;
         gameEnd: "w" | "b" | "draw" | "";
@@ -49,7 +49,7 @@ export const playGameSlice = createSlice({
     generateCandidates: (
       state,
       action: PayloadAction<{
-        candidates: MoveType[];
+        candidates: Move[];
       }>
     ) => {
       if (state.value) {

@@ -39,6 +39,7 @@ const BoardTiles = ({ turn }: BoardTilesProps) => {
           97 + (turn == WHITE ? col : size - col - 1)
         );
         const square = fileLabel + rankNumber;
+
         squares.push(
           <div
             key={`${row}-${col}`}
@@ -51,11 +52,26 @@ const BoardTiles = ({ turn }: BoardTilesProps) => {
               (agg, current) => agg || current.to == square,
               false
             ) ? (
-              <div
-                className={` absolute w-[30%] h-[30%] bg-${
-                  isBlack ? "dark" : "light"
-                }-tile-highlight rounded-full left-[35%] top-[35%] content-[''] `}
-              ></div>
+              playGame?.candidates.reduce(
+                (agg, current) => (agg || current.captured ? true : false),
+                false
+              ) ? (
+                <div
+                  className={` absolute w-[90%] h-[90%] ${
+                    isBlack
+                      ? "border-dark-tile-highlight"
+                      : "border-light-tile-highlight"
+                  } rounded-full border-8 border-solid left-[5%] top-[5%]`}
+                ></div>
+              ) : (
+                <div
+                  className={` absolute w-[30%] h-[30%] ${
+                    isBlack
+                      ? "bg-dark-tile-highlight"
+                      : "bg-light-tile-highlight"
+                  } rounded-full left-[35%] top-[35%]`}
+                ></div>
+              )
             ) : (
               <></>
             )}

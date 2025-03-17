@@ -29,6 +29,7 @@ const Piece = ({
   const actPiece = () => {
     if (piece[0] === turn) {
       const candidates = chess.moves({ square, verbose: true });
+
       dispatch(setActivePiece({ activePiece: square }));
       dispatch(generateCandidates({ candidates }));
       console.log("onDragStart5");
