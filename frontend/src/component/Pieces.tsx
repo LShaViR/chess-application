@@ -6,19 +6,21 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import Piece from "./ui/Piece";
 import { findSquare } from "../utils/helper";
-import { Square } from "chess.js";
+import { Chess, Square } from "chess.js";
 import useMakeMove from "../hooks/useMakeMove";
 
 const Pieces = ({ orientation }: PiecesProps) => {
-  const chess = useSelector((state: RootState) => state.game.value?.chess);
-  const turn = useSelector((state: RootState) => state.game.value?.turn);
+  let chess = useSelector((state: RootState) => state.game.value?.chess);
+  let turn = useSelector((state: RootState) => state.game.value?.turn);
   const ref = useRef<HTMLDivElement>(null);
   const playGame = useSelector((state: RootState) => state.playGame.value);
-  const board = playGame?.board;
+  let board = playGame?.board;
   const makeMove = useMakeMove();
 
-  if (!chess || !board || !turn) {
-    return <></>;
+  if (!board || !turn || !chess) {
+    board = new Chess().board();
+    turn = orientation || "w";
+    chess = new Chess();
   }
 
   const onDrop = (e: React.DragEvent) => {

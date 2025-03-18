@@ -1,4 +1,4 @@
-import { ChessInstance, ShortMove } from "chess.js";
+import { ChessInstance, Move, ShortMove } from "chess.js";
 import {
   clearActivePiece,
   clearCandidates,
@@ -11,7 +11,7 @@ import { filesArr } from "../utils/constant";
 
 const useMakeMove = () => {
   const dispatch = useDispatch();
-  return (move: ShortMove, chess: ChessInstance, turn: "w" | "b") => {
+  return (move: ShortMove | Move, chess: ChessInstance, turn: "w" | "b") => {
     console.log("move1");
     if (
       turn == chess.turn() &&

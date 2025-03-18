@@ -1,13 +1,23 @@
+import useSocket from "../hooks/useSocket";
 import { PlayButton } from "./ui/playButton";
 
 const RightSection = () => {
+  const { turn, start, startGame } = useSocket();
   return (
     <div className="mt-18 w-full flex justify-center">
-      <div className="grid gap-2">
+      {start ? (
+        turn
+      ) : (
         <div className=" grid w-full justify-center gap-2">
-          <PlayButton onClick={() => {}}>Play Online</PlayButton>
+          <PlayButton
+            onClick={() => {
+              startGame();
+            }}
+          >
+            Play Online
+          </PlayButton>
         </div>
-      </div>
+      )}
     </div>
   );
 };

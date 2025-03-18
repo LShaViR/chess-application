@@ -53,7 +53,9 @@ const BoardTiles = ({ orientation }: BoardTilesProps) => {
               false
             ) ? (
               playGame?.candidates.reduce(
-                (agg, current) => (agg || current.captured ? true : false),
+                (agg, current) =>
+                  agg ||
+                  (current.captured && current.to == square ? true : false),
                 false
               ) ? (
                 <div
