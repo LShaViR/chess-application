@@ -6,9 +6,11 @@ import { WebSocket } from "ws";
 export class GameManager {
   private games: Map<string, Game>;
   private users: User[];
+  private pendingUser: User | null;
   constructor() {
     this.games = new Map<string, Game>();
     this.users = [];
+    this.pendingUser = null;
   }
 
   addUser(user: User) {
@@ -37,13 +39,8 @@ export class GameManager {
     socket.on("message", async (data) => {
       const message = JSON.parse(data.toString());
       console.log(message);
-      if (message.type == INIT_GAME) {
-        let game = null;
-        if (message.payload?.gameId) {
-          game = getGame(message.payload.gameId);
-        } else {
-          game = new Game();
-        }
+      switch (message.type) {
+        case INIT_GAME:
       }
     });
   }
