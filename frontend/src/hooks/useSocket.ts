@@ -5,9 +5,8 @@ import { newPlayGame } from "../store/features/playGameSlice";
 import { Chess } from "chess.js";
 import { RootState } from "../store/store";
 import useMakeMove from "./useMakeMove";
-const useSocket = () => {
-  console.log("socket");
 
+const useSocket = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const game = useSelector((state: RootState) => state.game.value);
@@ -40,8 +39,6 @@ const useSocket = () => {
     };
     const chess = new Chess();
     if (data.gamePGN) {
-      console.log(data.gamePGN);
-
       chess.load_pgn(data.gamePGN);
     }
     dispatch(

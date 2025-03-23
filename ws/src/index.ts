@@ -22,7 +22,7 @@ wss.on("connection", function connection(ws: WebSocket) {
   //     });
   //   });
 
-  gameManager.addUser(new User(ws));
+  gameManager.addUser(ws);
 });
 
 server.listen(8080, function () {

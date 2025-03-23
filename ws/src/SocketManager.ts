@@ -7,6 +7,7 @@ export class User {
   public userId: string;
   public name: string;
   public isGuest?: boolean;
+  public gameId: string;
 
   constructor(socket: WebSocket, userJwtClaims?: userJwtClaims) {
     this.socket = socket;
@@ -14,5 +15,10 @@ export class User {
     this.id = randomUUID();
     this.name = userJwtClaims?.name || "lucky";
     this.isGuest = userJwtClaims?.isGuest || false;
+    this.gameId = "";
+  }
+
+  joinGame(gameId: string) {
+    this.gameId = gameId;
   }
 }
