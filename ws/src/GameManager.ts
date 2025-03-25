@@ -41,19 +41,19 @@ export class GameManager {
       const socket = user.socket;
       socket.on("message", async (data) => {
         const message = JSON.parse(data.toString());
-        console.log(message);
+        // console.log(message);
         switch (message.type) {
           case INIT_GAME:
             console.log("init game");
             console.log(message);
 
             const pendingUser = this.users.get(this.pendingUserId);
-            console.log(pendingUser);
+            // console.log(pendingUser);
 
             if (pendingUser) {
               const game = new Game(this.pendingUserId, pUserId);
               const gameId = randomUUID();
-              console.log(game, gameId);
+              //   console.log(game, gameId);
 
               //TODO: add game to DB
               this.games.set(gameId, game);
