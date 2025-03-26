@@ -35,7 +35,6 @@ const useSocket = () => {
       turn: "b",
       gameStatus: "running",
       gameId: "abcdefg",
-      gamePGN: ` 1. e4 e5 2. Nf3 `,
     };
     const chess = new Chess();
     if (data.gamePGN) {

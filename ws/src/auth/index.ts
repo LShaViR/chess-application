@@ -16,7 +16,16 @@ export const extractAuthUser = (
 ): User | undefined => {
   console.log(JWT_SECRET);
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as userJwtClaims;
+    const tokeni = jwt.sign(
+      {
+        id: token,
+        name: "lucky" + Math.floor(100 * Math.random()),
+        isGuest: true,
+      },
+      JWT_SECRET
+    );
+    const decoded = jwt.verify(tokeni, JWT_SECRET) as userJwtClaims;
+
     return new User(socket, decoded);
   } catch (error) {
     console.error(error);

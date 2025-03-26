@@ -12,19 +12,21 @@ import { WebSocket } from "ws";
 
 export class GameManager {
   private games: Map<string, Game>;
-  private users: Map<string, User>;
+  private users: Map<string, { user: User; gameId: string }>;
   private pendingUserId: string;
   constructor() {
     this.games = new Map<string, Game>();
-    this.users = new Map<string, User>();
+    this.users = new Map<string, { user: User; gameId: string }>();
     this.pendingUserId = "";
   }
 
-  addUser(socket: WebSocket) {
-    const user = new User(socket);
-    const userId = randomUUID(); //TODO: make some changes if user is joining game again
-    this.users.set(userId, user);
-    this.addHandler(userId);
+  addUser(user: User) {
+    //TODO: make some changes if user is joining game again
+    this.users.set(user.id, {
+      user,
+      gameId: this.users.get(user.id)?.gameId || "",
+    });
+    this.addHandler(user.id);
   }
 
   removeUser(userId: string) {
@@ -33,7 +35,8 @@ export class GameManager {
   }
 
   addHandler(userId: string) {
-    let user = this.users.get(userId);
+    let userI = this.users.get(userId);
+    let user = userI?.user;
     let pUserId = userId;
     if (!user) {
       return;
@@ -57,13 +60,18 @@ export class GameManager {
 
               //TODO: add game to DB
               this.games.set(gameId, game);
-              pendingUser.joinGame(gameId);
+              pendingUser.user.joinGame(gameId); // TODO: implement joinGame
+              pendingUser.gameId = gameId;
               user.joinGame(gameId);
-              pendingUser.socket.send(
+              user.gameId = gameId;
+              pendingUser.user.socket.send(
                 JSON.stringify({
                   type: INIT_GAME,
                   payload: {
-                    player1: { id: pendingUser.id, name: pendingUser.name },
+                    player1: {
+                      id: pendingUser.user.id,
+                      name: pendingUser.user.name,
+                    },
                     player2: { id: user.id, name: user.name },
                     turn: game.turn[0],
                   },
@@ -73,7 +81,10 @@ export class GameManager {
                 JSON.stringify({
                   type: INIT_GAME,
                   payload: {
-                    player1: { id: pendingUser.id, name: pendingUser.name },
+                    player1: {
+                      id: pendingUser.user.id,
+                      name: pendingUser.user.name,
+                    },
                     player2: { id: user.id, name: user.name },
                     turn: game.turn[1],
                   },
@@ -95,7 +106,7 @@ export class GameManager {
               if (game.player1 == pUserId) {
                 const player2 = this.users.get(game.player2);
                 if (player2) {
-                  player2.socket.send(
+                  player2.user.socket.send(
                     JSON.stringify({
                       type: MOVE,
                       payload: {
@@ -116,7 +127,7 @@ export class GameManager {
               this.users.set(updateUserId, userX);
               this.users.delete(userId);
               pUserId = updateUserId;
-              userX.socket.send(
+              userX.user.socket.send(
                 JSON.stringify({
                   type: "JOIN_AGAIN",
                   payload: {},
@@ -136,7 +147,7 @@ export class GameManager {
               game.player1 == userId ? game.player2 : game.player1;
             const otherUser = this.users.get(otherUserId);
             if (otherUser) {
-              otherUser.socket.send(
+              otherUser.user.socket.send(
                 JSON.stringify({
                   type: OPPONENT_DISCONNECTED,
                 })

@@ -4,7 +4,7 @@ import { PlayButton } from "./ui/playButton";
 const RightSection = () => {
   const { turn, start, startGame } = useSocket();
   return (
-    <div className="mt-18 w-full flex justify-center">
+    <div className="mt-18 w-full flex justify-center text-white">
       {start ? (
         turn
       ) : (
