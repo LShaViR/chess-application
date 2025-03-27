@@ -1,46 +1,38 @@
-//// @ts-nocheck
 import { useRef } from "react";
 import { PiecesProps } from "../utils/types";
 import { BLACK } from "../utils/constant";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
 import Piece from "./ui/Piece";
 import { findSquare } from "../utils/helper";
-import { Chess, Square } from "chess.js";
-import useMakeMove from "../hooks/useMakeMove";
+import { Square } from "chess.js";
 
-const Pieces = ({ orientation }: PiecesProps) => {
-  let chess = useSelector((state: RootState) => state.game.value?.chess);
-  let turn = useSelector((state: RootState) => state.game.value?.turn);
+const Pieces = ({
+  disable,
+  orientation,
+  active,
+  setActive,
+  board,
+  makeMove,
+}: PiecesProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const playGame = useSelector((state: RootState) => state.playGame.value);
-  let board = playGame?.board;
-  const makeMove = useMakeMove();
-
-  if (!board || !turn || !chess) {
-    board = new Chess().board();
-    turn = orientation || "w";
-    chess = new Chess();
-  }
 
   const onDrop = (e: React.DragEvent) => {
     console.log("onDrop1");
     e.preventDefault();
     const [_piece, fromSquare] = e.dataTransfer.getData("text").split(",");
-    const toSquare = findSquare(e, ref.current, turn) || fromSquare;
+    const toSquare = findSquare(e, ref.current, orientation) || fromSquare;
     const move = { from: fromSquare as Square, to: toSquare as Square };
-    makeMove(move, chess, turn);
+    makeMove(move);
     console.log("onDrop2");
   };
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const fromSquare = playGame?.activePiece;
+    const fromSquare = active;
     if (!fromSquare) {
       return;
     }
-    const toSquare = findSquare(e, ref.current, turn) || fromSquare;
+    const toSquare = findSquare(e, ref.current, orientation) || fromSquare;
     const move = { from: fromSquare as Square, to: toSquare as Square };
-    makeMove(move, chess, turn);
+    makeMove(move);
   };
 
   const onDragOver = (e: React.DragEvent) => {
@@ -67,10 +59,10 @@ const Pieces = ({ orientation }: PiecesProps) => {
             return (
               <Piece
                 key={ri * 8 + ci}
-                turn={turn}
+                orientation={orientation}
                 piece={piece}
                 square={board[rowI][colI]!.square}
-                chess={chess}
+                setActive={!disable ? setActive : (_square) => {}}
               />
             );
           } else {

@@ -1,37 +1,31 @@
-import { useDispatch } from "react-redux";
-import { ChessInstance, Square } from "chess.js";
-import {
-  clearCandidates,
-  generateCandidates,
-  setActivePiece,
-} from "../../store/features/playGameSlice";
+import { Square } from "chess.js";
 import { BLACK, filesArr, WHITE } from "../../utils/constant";
 
 const Piece = ({
-  turn,
+  orientation,
   piece,
   square,
-  chess,
+  setActive,
 }: {
-  turn: "w" | "b";
+  orientation: "w" | "b";
   piece: string;
   square: Square;
-  chess: ChessInstance;
+  setActive: (square: Square | "") => void;
 }) => {
   const ci =
-    turn == WHITE
+    orientation == WHITE
       ? filesArr.indexOf(square[0])
       : 7 - filesArr.indexOf(square[0]);
-  const ri = turn == BLACK ? Number(square[1]) - 1 : 8 - Number(square[1]);
-
-  const dispatch = useDispatch();
+  const ri =
+    orientation == BLACK ? Number(square[1]) - 1 : 8 - Number(square[1]);
 
   const actPiece = () => {
-    if (piece[0] === turn) {
-      const candidates = chess.moves({ square, verbose: true });
+    if (piece[0] === orientation) {
+      setActive(square);
+      // const candidates = chess.moves({ square, verbose: true });
 
-      dispatch(setActivePiece({ activePiece: square }));
-      dispatch(generateCandidates({ candidates }));
+      // dispatch(setActivePiece({ activePiece: square }));
+      // dispatch(generateCandidates({ candidates }));
       console.log("onDragStart5");
     }
   };
@@ -57,7 +51,7 @@ const Piece = ({
     console.log("onDragEnd1");
     const element = e.target as HTMLDivElement;
     element.style.display = "block";
-    dispatch(clearCandidates());
+    setActive("");
     console.log("onDragEnd2");
   };
   return (

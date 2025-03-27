@@ -53,7 +53,7 @@ const useSocket = () => {
     dispatch(
       newPlayGame({
         candidates: [],
-        activePiece: "",
+        activePiece: { square: "", piece: "" },
         gameEnd: "",
         board: chess.board(),
       })

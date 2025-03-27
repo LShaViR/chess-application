@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Move, Square } from "chess.js";
+import { Move, Piece, Square } from "chess.js";
 import { BoardType } from "../../utils/types";
 
 export interface PlayGameState {
   value: {
     candidates: Move[];
-    activePiece: string;
+    activePiece: { square: Square | ""; piece: Piece | "" };
     promotion?:
       | { file: number; rank: number; from: Square; to: Square }
       | undefined;
@@ -27,7 +27,7 @@ export const playGameSlice = createSlice({
       state,
       action: PayloadAction<{
         candidates: Move[];
-        activePiece: string;
+        activePiece: { square: Square | ""; piece: Piece | "" };
         promotion?:
           | { file: number; rank: number; from: Square; to: Square }
           | undefined;
@@ -37,7 +37,12 @@ export const playGameSlice = createSlice({
     ) => {
       state.value = action.payload;
     },
-    setActivePiece: (state, action: PayloadAction<{ activePiece: string }>) => {
+    setActivePiece: (
+      state,
+      action: PayloadAction<{
+        activePiece: { square: Square | ""; piece: Piece | "" };
+      }>
+    ) => {
       if (state.value) {
         state.value = {
           ...state.value,
@@ -49,7 +54,7 @@ export const playGameSlice = createSlice({
       if (state.value) {
         state.value = {
           ...state.value,
-          activePiece: "",
+          activePiece: { square: "", piece: "" },
         };
       }
     },

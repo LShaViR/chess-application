@@ -17,19 +17,6 @@ const useMakeMove = () => {
       turn == chess.turn() &&
       isValidMove(move, chess.moves({ square: move.from, verbose: true }))
     ) {
-      console.log("move3");
-      if (isPromotion(chess, move)) {
-        console.log("move4");
-        dispatch(
-          promotionUpdate({
-            file: filesArr.indexOf(move.to[0]),
-            rank: Number(move.to[1]),
-            ...move,
-          })
-        );
-        console.log("move5");
-        return;
-      }
       console.log("move6");
 
       chess.move(move);

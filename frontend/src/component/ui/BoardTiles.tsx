@@ -1,14 +1,8 @@
-import { useSelector } from "react-redux";
 import { WHITE } from "../../utils/constant";
 import { BoardTilesProps } from "../../utils/types";
-import { RootState } from "../../store/store";
 
-const BoardTiles = ({ orientation }: BoardTilesProps) => {
-  const size = 8; // Standard chess board
-
-  //TODO: make hook and write logic for candidates
-  const playGame = useSelector((state: RootState) => state.playGame.value);
-  // const chess = useSelector((state: RootState) => state.game.value?.chess);
+const BoardTiles = ({ orientation, candidates }: BoardTilesProps) => {
+  const size = 8;
 
   const renderBoard = () => {
     const squares = [];
@@ -19,7 +13,7 @@ const BoardTiles = ({ orientation }: BoardTilesProps) => {
       squares.push(
         <div
           key={`rank-${row}`}
-          className={`absolute font-medium text-sm ${
+          className={`absolute font-medium text-sm z-10 ${
             isBlack ? "text-light-tile" : "text-dark-tile"
           }`}
           style={{
@@ -48,11 +42,11 @@ const BoardTiles = ({ orientation }: BoardTilesProps) => {
             } ${isBlack ? "bg-dark-tile" : "bg-light-tile"}
             `}
           >
-            {playGame?.candidates.reduce(
+            {candidates.reduce(
               (agg, current) => agg || current.to == square,
               false
             ) ? (
-              playGame?.candidates.reduce(
+              candidates.reduce(
                 (agg, current) =>
                   agg ||
                   (current.captured && current.to == square ? true : false),

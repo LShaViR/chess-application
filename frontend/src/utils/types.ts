@@ -1,7 +1,8 @@
-import { PieceColor, PieceType, Square } from "chess.js";
+import { Move, PieceColor, PieceType, ShortMove, Square } from "chess.js";
 
 export type BoardTilesProps = {
   orientation: "w" | "b";
+  candidates: Move[];
 };
 
 export type ChessBoardProps = {
@@ -9,7 +10,18 @@ export type ChessBoardProps = {
 };
 
 export type PiecesProps = {
+  disable: boolean;
   orientation: "w" | "b";
+  setActive: (square: Square | "") => void;
+  active: Square | "";
+  makeMove: (move: ShortMove) => void;
+  board: Array<
+    Array<{
+      type: PieceType;
+      color: PieceColor;
+      square: Square;
+    } | null>
+  >;
 };
 
 export enum Color {
