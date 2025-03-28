@@ -1,8 +1,24 @@
+import { useEffect, useState } from "react";
 import ChessBoard from "../component/ChessBoard";
 import Navbar from "../component/navbar";
 import RightSection from "../component/RightSection";
 
 const Game = () => {
+  const [socket, setSocket] = useState<WebSocket | null>(null);
+
+  useEffect(() => {
+    const newSocket = new WebSocket("ws://localhost:8080");
+    newSocket.onopen = () => {
+      console.log("Connection established");
+      newSocket.send("Hello Server!");
+    };
+    newSocket.onmessage = (message) => {
+      console.log("Message received:", message.data);
+    };
+    setSocket(newSocket);
+    return () => newSocket.close();
+  }, []);
+
   return (
     <div className="grid grid-cols-21 h-screen bg-background">
       <div className="row-span-1 hidden lg:block">

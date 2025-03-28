@@ -8,8 +8,6 @@ export class Game {
   turn: "wb" | "bw";
   viewer: User[];
   gameStatus: GameStatus;
-  currentPosition: string;
-  prevPosition: string;
   lastMove: string;
   chess: Chess;
   constructor(player1: string, player2: string) {
@@ -17,8 +15,6 @@ export class Game {
     this.player2 = player2;
     this.viewer = [];
     this.gameStatus = GameStatus.running;
-    this.currentPosition = new Chess().fen();
-    this.prevPosition = "";
     this.lastMove = "";
     this.chess = new Chess();
     this.turn = Math.floor(Math.random() * 100) % 2 == 0 ? "wb" : "bw";

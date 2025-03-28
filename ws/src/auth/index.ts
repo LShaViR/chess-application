@@ -9,7 +9,7 @@ export interface userJwtClaims {
   name: string;
   isGuest?: boolean;
 }
-
+//TODO: update this function
 export const extractAuthUser = (
   token: string,
   socket: WebSocket

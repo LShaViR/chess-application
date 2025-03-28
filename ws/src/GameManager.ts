@@ -1,15 +1,20 @@
 import { randomUUID } from "crypto";
 import { Game } from "./Game";
 import {
+  EXIT_GAME,
   INIT_GAME,
   JOIN_AGAIN,
   JOIN_GAME,
   MOVE,
   OPPONENT_DISCONNECTED,
+  OPPONENT_RECONNECTED,
 } from "./messages";
 import { User } from "./SocketManager";
 import { WebSocket } from "ws";
+import { messageSchema } from "./zod/schema";
+import { brodcastMessage } from "./utils/brodcast";
 
+//TODO: what if server is down logic is pending
 export class GameManager {
   private games: Map<string, Game>;
   private users: Map<string, { user: User; gameId: string }>;
@@ -37,30 +42,66 @@ export class GameManager {
   addHandler(userId: string) {
     let userI = this.users.get(userId);
     let user = userI?.user;
-    let pUserId = userId;
     if (!user) {
       return;
     } else {
       const socket = user.socket;
       socket.on("message", async (data) => {
-        const message = JSON.parse(data.toString());
-        // console.log(message);
+        const messageIn = messageSchema.safeParse(JSON.parse(data.toString()));
+
+        if (!messageIn.success) {
+          socket.send("You send wrong input");
+          return;
+        }
+        const message = messageIn.data;
+
         switch (message.type) {
-          case INIT_GAME:
-            console.log("init game");
-            console.log(message);
+          case INIT_GAME: //TODO: parse or validate type of message
+            if (userI?.gameId && this.games.get(userI.gameId)) {
+              const game = this.games.get(userI.gameId);
+              if (!game) {
+                return;
+              }
+              const player1 = this.users.get(game.player1)!.user!;
+              const player2 = this.users.get(game.player2)!.user!;
 
+              const joiningPlayer = user.id == player1.id ? player1 : player2;
+              const waitingPlayer = user.id == player2.id ? player1 : player2;
+              joiningPlayer.socket.send(
+                JSON.stringify({
+                  type: JOIN_AGAIN,
+                  payload: {
+                    player1: {
+                      id: player1.id,
+                      name: player1.name,
+                    },
+                    player2: { id: player2.id, name: player2.name },
+                    turn: user.id == player1.id ? game?.turn[0] : game?.turn[1],
+                  },
+                })
+              );
+              waitingPlayer.socket.send(
+                JSON.stringify({
+                  type: OPPONENT_RECONNECTED,
+                  payload: {
+                    player1: {
+                      id: player1.id,
+                      name: player1.name,
+                    },
+                    player2: { id: player2.id, name: player2.name },
+                    turn: user.id == player1.id ? game?.turn[0] : game?.turn[1],
+                  },
+                })
+              );
+              return;
+            }
             const pendingUser = this.users.get(this.pendingUserId);
-            // console.log(pendingUser);
-
             if (pendingUser) {
-              const game = new Game(this.pendingUserId, pUserId);
+              const game = new Game(this.pendingUserId, userId);
               const gameId = randomUUID();
-              //   console.log(game, gameId);
-
               //TODO: add game to DB
               this.games.set(gameId, game);
-              pendingUser.user.joinGame(gameId); // TODO: implement joinGame
+              pendingUser.user.joinGame(gameId);
               pendingUser.gameId = gameId;
               user.joinGame(gameId);
               user.gameId = gameId;
@@ -91,49 +132,44 @@ export class GameManager {
                 })
               );
             } else {
-              this.pendingUserId = pUserId;
+              this.pendingUserId = userId;
             }
-
             break;
-          case MOVE:
+
+          case MOVE: //TODO: parse or validate type of message
             const game = this.games.get(message.payload.gameId); //make a schema for payload for each type
 
             if (!game) {
               //TODO: find game in database as well
               //game not found
+              return;
             } else {
-              game.chess.move(message.payload.move);
-              if (game.player1 == pUserId) {
-                const player2 = this.users.get(game.player2);
-                if (player2) {
-                  player2.user.socket.send(
-                    JSON.stringify({
-                      type: MOVE,
-                      payload: {
-                        ...message.payload.move,
-                      },
-                    })
-                  );
-                } else {
-                  //TODO: handle case for disconnection
-                }
+              const move = game.chess.move(message.payload.move);
+              if (!move) {
+                socket.send("wrong move send");
+                return;
               }
+
+              //TODO: add move to queue for DB
+              brodcastMessage(
+                [
+                  this.users.get(game.player1)!.user!.socket,
+                  this.users.get(game.player1)!.user!.socket,
+                ],
+                JSON.stringify({
+                  type: MOVE,
+                  payload: {
+                    ...move,
+                  },
+                })
+              ); //TODO: check for if socket is there or not
             }
             break;
-          case JOIN_AGAIN:
-            const updateUserId = message.payload.userId;
-            const userX = this.users.get(userId);
-            if (userX) {
-              this.users.set(updateUserId, userX);
-              this.users.delete(userId);
-              pUserId = updateUserId;
-              userX.user.socket.send(
-                JSON.stringify({
-                  type: "JOIN_AGAIN",
-                  payload: {},
-                })
-              );
-            }
+          case EXIT_GAME: //TODO: parse or validate type of message
+            break;
+
+          default:
+            socket.send("Wrong request type");
         }
       });
       socket.on("close", () => {
@@ -155,7 +191,6 @@ export class GameManager {
             }
           }
         }
-
         return;
       });
     }
