@@ -14,23 +14,15 @@ const wss = new WebSocketServer({ server });
 const gameManager = new GameManager();
 
 wss.on("connection", function connection(ws: WebSocket, req: Request) {
-  const token: string = req.url.split("userId")[1];
+  const token: string = req.url.split("token=")[1];
   console.log(token);
 
   const user = extractAuthUser(token, ws);
   ws.on("error", console.error);
 
-  //   ws.on("message", function message(data, isBinary) {
-  //     wss.clients.forEach(function each(client) {
-  //       if (client.readyState === WebSocket.OPEN) {
-  //         client.send(data, { binary: isBinary });
-  //       }
-  //     });
-  //   });
-
   gameManager.addUser(new User(ws, user));
 });
 
-server.listen(8080, function () {
+server.listen(process.env.PORT || 8080, function () {
   console.log(new Date() + " Server is listening on port 8080");
 });

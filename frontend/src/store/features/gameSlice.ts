@@ -7,7 +7,7 @@ export interface GameState {
     player1: string;
     player2: string;
     turn: "w" | "b";
-    gameStatus: "running" | "finished";
+    gameStatus: "running" | "white_wins" | "black_wins" | "draw";
     gameId: string;
     chess: ChessInstance;
   } | null;
@@ -27,7 +27,7 @@ export const gameSlice = createSlice({
         player1: string;
         player2: string;
         turn: "w" | "b";
-        gameStatus: "running" | "finished";
+        gameStatus: "running" | "white_wins" | "black_wins" | "draw";
         gameId: string;
         chess: ChessInstance;
       }>
@@ -37,7 +37,7 @@ export const gameSlice = createSlice({
     updateGame: (
       state,
       action: PayloadAction<{
-        gameStatus: "running" | "finished";
+        gameStatus: "running" | "white_wins" | "black_wins" | "draw";
       }>
     ) => {
       if (state.value) {

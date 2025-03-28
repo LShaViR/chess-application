@@ -1,78 +1,25 @@
-import { useDispatch, useSelector } from "react-redux";
-import { newGame } from "../store/features/gameSlice";
 import { useEffect, useState } from "react";
-import { newPlayGame } from "../store/features/playGameSlice";
-import { Chess } from "chess.js";
-import { RootState } from "../store/store";
-import useMakeMove from "./useMakeMove";
+import useMessageHandler from "./useMessageHandler";
 
 const useSocket = () => {
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(true);
-  const game = useSelector((state: RootState) => state.game.value);
-  const playGame = useSelector((state: RootState) => state.playGame.value);
-  const makeMove = useMakeMove();
-  const [start, setStart] = useState(false);
-
-  const startGame = () => {
-    setStart(true);
-  };
+  const [socket, setSocket] = useState<WebSocket | null>(null);
+  const messageHandler = useMessageHandler();
 
   useEffect(() => {
-    if (!start) {
-      return;
-    }
-    const data: {
-      player1: string;
-      player2: string;
-      turn: "w" | "b";
-      gameStatus: "running" | "finished";
-      gameId: string;
-      gamePGN?: string;
-    } = {
-      player1: "lucky",
-      player2: "rathore",
-      turn: "b",
-      gameStatus: "running",
-      gameId: "abcdefg",
+    const token = "luckyrathore" + Math.random() * 100;
+    const newSocket = new WebSocket(`ws://localhost:8080/?token=${token}`);
+    newSocket.onopen = () => {
+      console.log("Connection established");
     };
-    const chess = new Chess();
-    if (data.gamePGN) {
-      chess.load_pgn(data.gamePGN);
-    }
-    dispatch(
-      newGame({
-        player1: data.player1,
-        player2: data.player2,
-        turn: data.turn,
-        gameStatus: data.gameStatus,
-        gameId: data.gameId,
-        chess: chess,
-      })
-    );
-    dispatch(
-      newPlayGame({
-        candidates: [],
-        activePiece: { square: "", piece: "" },
-        gameEnd: "",
-        board: chess.board(),
-      })
-    );
+    newSocket.onmessage = async (message) => {
+      console.log("message");
 
-    setLoading(false);
-  }, [start]);
-
-  useEffect(() => {
-    console.log(game?.chess.history({ verbose: true }));
-    const length = game?.chess.moves().length;
-
-    if (length && game.chess.turn() != game.turn) {
-      const random = Math.floor(length * Math.random());
-      const turn = game.turn == "w" ? "b" : "w";
-      makeMove(game.chess.moves({ verbose: true })[random], game.chess, turn);
-    }
-  }, [game, playGame]);
-  return { loading, turn: game?.turn, start, startGame };
+      await messageHandler(message.data);
+    };
+    setSocket(newSocket);
+    return () => newSocket.close();
+  }, []);
+  return socket;
 };
 
 export default useSocket;

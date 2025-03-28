@@ -27,7 +27,6 @@ export const findSquare = (
 
 export const isValidMove = (move: MoveType, candidates?: MoveType[]) => {
   console.log("isValidMove1");
-  console.log(move, candidates);
   let ans = false;
   candidates?.forEach((candi) => {
     if (candi.from == move.from && candi.to == move.to) {

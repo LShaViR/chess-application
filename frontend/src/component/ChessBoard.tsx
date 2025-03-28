@@ -17,7 +17,7 @@ import { isPromotion } from "../utils/helper";
 import { Promotion } from "./Promotion";
 import { filesArr } from "../utils/constant";
 
-const ChessBoard = () => {
+const ChessBoard = ({ onMove }: { onMove: (move: ShortMove) => void }) => {
   const playGame = useSelector((state: RootState) => state.playGame.value);
   const game = useSelector((state: RootState) => state.game.value);
   const [active, setActive] = useState<Square | "">("");
@@ -31,7 +31,6 @@ const ChessBoard = () => {
     to?: Square | undefined;
   }>({ file: -1 });
   const [orientation, setOrientation] = useState<"w" | "b">("w");
-  const makeMove = useMakeMove();
 
   useEffect(() => {
     if (game) {
@@ -62,11 +61,11 @@ const ChessBoard = () => {
           turn={turn}
           makeMove={(option: Exclude<PieceType, "p" | "k">) => {
             if (promotion.to && promotion.from) {
-              makeMove(
-                { from: promotion.from, to: promotion.to, promotion: option },
-                chess,
-                turn
-              );
+              onMove({
+                from: promotion.from,
+                to: promotion.to,
+                promotion: option,
+              });
             }
             setPromotion({ file: -1 });
           }}
@@ -93,7 +92,7 @@ const ChessBoard = () => {
             });
             setCandidates([]);
             return;
-          } else makeMove(move, chess, turn);
+          } else onMove(move);
         }}
         board={board}
       />
