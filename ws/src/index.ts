@@ -1,7 +1,7 @@
 import { WebSocketServer, WebSocket } from "ws";
 import http from "http";
 import { GameManager } from "./GameManager";
-import { User } from "./SocketManager";
+import { User } from "./User";
 import url from "url";
 import { extractAuthUser } from "./auth";
 

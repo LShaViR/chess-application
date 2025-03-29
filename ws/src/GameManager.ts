@@ -5,12 +5,11 @@ import {
   GAME_OVER,
   INIT_GAME,
   JOIN_AGAIN,
-  JOIN_GAME,
   MOVE,
   OPPONENT_DISCONNECTED,
   OPPONENT_RECONNECTED,
 } from "./messages";
-import { User } from "./SocketManager";
+import { User } from "./User";
 import { WebSocket } from "ws";
 import { messageSchema } from "./zod/schema";
 import { brodcastMessage } from "./utils/brodcast";
@@ -19,7 +18,7 @@ import { BLACK_WINS, DRAW, WHITE_WINS } from "./utils/constant";
 //TODO: what if server is down logic is pending
 export class GameManager {
   private games: Map<string, Game>;
-  private users: Map<string, { user: User; gameId: string }>;
+  private users: Map<string, { user: User | null; gameId: string }>;
   private pendingUserId: string;
   constructor() {
     this.games = new Map<string, Game>();
@@ -37,8 +36,17 @@ export class GameManager {
   }
 
   removeUser(userId: string) {
+    const gameId = this.users.get(userId)?.gameId;
+    if (gameId) {
+      this.users.set(userId, {
+        user: null,
+        gameId: gameId,
+      });
+      //TODO: start a timer for game abondend
+    } else {
+      this.users.delete(userId);
+    }
     console.log("removed user");
-    this.users.delete(userId);
   }
 
   removeGame(gameId: string) {
@@ -116,6 +124,9 @@ export class GameManager {
               const pendingUser = this.users.get(this.pendingUserId);
               console.log("india3");
               if (pendingUser) {
+                if (!pendingUser.user || pendingUser.user?.id == user.id) {
+                  return;
+                }
                 console.log("india4");
                 const game = new Game(this.pendingUserId, userId);
                 const gameId = randomUUID();
@@ -208,8 +219,8 @@ export class GameManager {
                     : DRAW;
                   brodcastMessage(
                     [
-                      this.users.get(game.player1)?.user.socket,
-                      this.users.get(game.player2)?.user.socket,
+                      this.users.get(game.player1)?.user?.socket,
+                      this.users.get(game.player2)?.user?.socket,
                     ],
                     JSON.stringify({
                       type: GAME_OVER,
@@ -242,7 +253,7 @@ export class GameManager {
             const otherUserId =
               game.player1 == userId ? game.player2 : game.player1;
             const otherUser = this.users.get(otherUserId);
-            if (otherUser) {
+            if (otherUser?.user) {
               otherUser.user.socket.send(
                 JSON.stringify({
                   type: OPPONENT_DISCONNECTED,

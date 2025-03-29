@@ -16,23 +16,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//TODO: make enums where ever required
 model Player {
   id       String @id @default(uuid())
   email    String @unique
   name     String
   password String
-  games    Game[]
+  games1   Game[] @relation("player1")
+  games2   Game[] @relation("player2")
 }
 
 model Game {
-  id       String @id @default(uuid())
-  playerId String
-  player   Player @relation(fields: [playerId], references: [id])
-  moves    Move[]
+  id         String @id @default(uuid())
+  player1Id  String
+  player1    Player @relation("player1", fields: [player1Id], references: [id])
+  player2Id  String
+  player2    Player @relation("player2", fields: [player2Id], references: [id])
+  turn       String
+  gameStatus String
+  moves      Move[]
 }
 
 model Move {
-  id     String @id @default(uuid())
-  gameId String
-  Game   Game   @relation(fields: [gameId], references: [id])
+  id        String  @id @default(uuid())
+  moveNo    Int
+  from      String
+  to        String
+  promotion String?
+  turn      String
+  gameId    String
+  Game      Game    @relation(fields: [gameId], references: [id])
 }

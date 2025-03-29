@@ -66,9 +66,14 @@ const Navbar: React.FC = () => {
       <div className="py-2 border-t border-gray-700">
         <NavItem
           icon={<LogOut size={20} color="#d1d5db" />}
-          active={activeIndex === 10}
           onClick={() => {
-            setActiveIndex(10);
+            const token = localStorage.getItem("tokenChess");
+            if (token) {
+              localStorage.setItem("tokenChess", "");
+              navigate("/auth");
+            } else {
+              navigate("/auth");
+            }
           }}
         />
       </div>

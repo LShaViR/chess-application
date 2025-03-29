@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { User } from "../SocketManager";
+import { User } from "../User";
 import { WebSocket } from "ws";
 
 const JWT_SECRET = process.env.JWT_SECRET || "secretKey";
@@ -7,7 +7,6 @@ const JWT_SECRET = process.env.JWT_SECRET || "secretKey";
 export interface userJwtClaims {
   id: string;
   name: string;
-  isGuest?: boolean;
 }
 //TODO: update this function
 export const extractAuthUser = (
@@ -16,15 +15,7 @@ export const extractAuthUser = (
 ): User | undefined => {
   console.log(JWT_SECRET);
   try {
-    const tokeni = jwt.sign(
-      {
-        id: token,
-        name: "lucky" + Math.floor(100 * Math.random()),
-        isGuest: true,
-      },
-      JWT_SECRET
-    );
-    const decoded = jwt.verify(tokeni, JWT_SECRET) as userJwtClaims;
+    const decoded = jwt.verify(token, JWT_SECRET) as userJwtClaims;
 
     return new User(socket, decoded);
   } catch (error) {
