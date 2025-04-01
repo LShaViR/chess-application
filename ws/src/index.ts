@@ -15,9 +15,9 @@ const gameManager = new GameManager();
 
 wss.on("connection", function connection(ws: WebSocket, req: Request) {
   const token: string = req.url.split("token=")[1];
-  console.log(token);
 
   const user = extractAuthUser(token, ws);
+
   ws.on("error", console.error);
 
   gameManager.addUser(new User(ws, user));

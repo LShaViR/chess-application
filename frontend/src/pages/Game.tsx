@@ -47,6 +47,9 @@ const Game = () => {
           <div className="col-span-10 lg:col-span-4 bg-navbar h-screen py-8">
             <RightSection
               startGame={() => {
+                console.log(localStorage.getItem("tokenChess"));
+                console.log(socket);
+
                 socket.send(
                   JSON.stringify({
                     type: INIT_GAME,

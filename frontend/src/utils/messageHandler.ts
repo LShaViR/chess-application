@@ -53,14 +53,17 @@ export const initMessageHandler = (
 
           break;
         case JOIN_AGAIN:
+          const chess = new Chess();
+          chess.load_pgn(payload.pgn);
+
           dispatch(
             newGame({
-              player1: payload.player1,
-              player2: payload.player2,
+              player1: payload.player1.name,
+              player2: payload.player2.name,
               turn: payload.turn,
               gameStatus: "running",
               gameId: payload.gameId,
-              chess: new Chess(payload.pgn),
+              chess: chess,
             })
           );
           dispatch(
@@ -68,7 +71,7 @@ export const initMessageHandler = (
               candidates: [],
               activePiece: { square: "", piece: "" },
               gameEnd: "",
-              board: new Chess(payload.pgn).board(),
+              board: chess.board(),
             })
           );
           break;

@@ -28,25 +28,36 @@ export class GameManager {
 
   addUser(user: User) {
     //TODO: make some changes if user is joining game again
-    this.users.set(user.id, {
-      user,
-      gameId: this.users.get(user.id)?.gameId || "",
-    });
+    const gameId = this.users.get(user.id)?.gameId;
+    if (gameId) {
+      user.gameId = gameId;
+      this.users.set(user.id, {
+        user,
+        gameId: gameId,
+      });
+    } else {
+      this.users.set(user.id, {
+        user,
+        gameId: "",
+      });
+    }
     this.addHandler(user.id);
   }
 
   removeUser(userId: string) {
+    console.log(userId);
+
     const gameId = this.users.get(userId)?.gameId;
-    if (gameId) {
+    if (gameId && this.games.get(gameId)) {
       this.users.set(userId, {
         user: null,
         gameId: gameId,
       });
+
       //TODO: start a timer for game abondend
     } else {
       this.users.delete(userId);
     }
-    console.log("removed user");
   }
 
   removeGame(gameId: string) {
@@ -64,79 +75,80 @@ export class GameManager {
         try {
           const obj = JSON.parse(data.toString());
           const messageIn = messageSchema.safeParse(obj);
-          console.log(messageIn);
           if (!messageIn.success) {
             socket.send("You send wrong input type");
             return;
           }
           const message = messageIn.data;
-          console.log(message);
 
           switch (message.type) {
             case INIT_GAME: //TODO: parse or validate type of message
-              console.log(
-                userI,
-                userI?.gameId ? this.users.get(userI.gameId) : false
-              );
-
               if (userI?.gameId && this.games.get(userI.gameId)) {
                 const game = this.games.get(userI.gameId);
-                if (!game) {
+                if (game) {
+                  const player1 = this.users.get(game.player1)!.user!;
+                  const player2 = this.users.get(game.player2)!.user!;
+
+                  const joiningPlayer =
+                    user.id == player1.id ? player1 : player2;
+                  const waitingPlayer =
+                    user.id == player2.id ? player1 : player2;
+                  joiningPlayer.socket.send(
+                    JSON.stringify({
+                      type: JOIN_AGAIN,
+                      payload: {
+                        player1: {
+                          id: player1.id,
+                          name: player1.name,
+                        },
+                        player2: { id: player2.id, name: player2.name },
+                        turn:
+                          user.id == player1.id ? game?.turn[0] : game?.turn[1],
+                        pgn: game.chess.pgn(),
+                      },
+                    })
+                  );
+                  waitingPlayer.socket.send(
+                    JSON.stringify({
+                      type: OPPONENT_RECONNECTED,
+                      payload: {
+                        player1: {
+                          id: player1.id,
+                          name: player1.name,
+                        },
+                        player2: { id: player2.id, name: player2.name },
+                        turn:
+                          user.id == player1.id ? game?.turn[0] : game?.turn[1],
+                      },
+                    })
+                  );
                   return;
                 }
-                const player1 = this.users.get(game.player1)!.user!;
-                const player2 = this.users.get(game.player2)!.user!;
-
-                const joiningPlayer = user.id == player1.id ? player1 : player2;
-                const waitingPlayer = user.id == player2.id ? player1 : player2;
-                joiningPlayer.socket.send(
-                  JSON.stringify({
-                    type: JOIN_AGAIN,
-                    payload: {
-                      player1: {
-                        id: player1.id,
-                        name: player1.name,
-                      },
-                      player2: { id: player2.id, name: player2.name },
-                      turn:
-                        user.id == player1.id ? game?.turn[0] : game?.turn[1],
-                    },
-                  })
-                );
-                waitingPlayer.socket.send(
-                  JSON.stringify({
-                    type: OPPONENT_RECONNECTED,
-                    payload: {
-                      player1: {
-                        id: player1.id,
-                        name: player1.name,
-                      },
-                      player2: { id: player2.id, name: player2.name },
-                      turn:
-                        user.id == player1.id ? game?.turn[0] : game?.turn[1],
-                    },
-                  })
-                );
-                return;
               }
-              console.log("india2");
 
               const pendingUser = this.users.get(this.pendingUserId);
-              console.log("india3");
+
               if (pendingUser) {
                 if (!pendingUser.user || pendingUser.user?.id == user.id) {
                   return;
                 }
-                console.log("india4");
+
                 const game = new Game(this.pendingUserId, userId);
                 const gameId = randomUUID();
                 //TODO: add game to DB
                 this.games.set(gameId, game);
                 pendingUser.user.joinGame(gameId);
-                pendingUser.gameId = gameId;
+                this.users.set(this.pendingUserId, {
+                  user: pendingUser.user,
+                  gameId: gameId,
+                });
                 user.joinGame(gameId);
-                user.gameId = gameId;
-                console.log("india5");
+
+                this.users.set(user.id, {
+                  user: user,
+                  gameId: gameId,
+                });
+
                 pendingUser.user.socket.send(
                   JSON.stringify({
                     type: INIT_GAME,
@@ -165,7 +177,6 @@ export class GameManager {
                 );
                 this.pendingUserId = "";
               } else {
-                console.log("india6");
                 this.pendingUserId = userId;
                 socket.send(
                   JSON.stringify({
@@ -179,17 +190,14 @@ export class GameManager {
               break;
 
             case MOVE: //TODO: parse or validate type of message
-              console.log("move");
-
               const game = this.games.get(user.gameId); //make a schema for payload for each type
-              console.log("move2");
+
               if (!game) {
                 //TODO: find game in database as well
                 //game not found
                 return;
               } else {
                 const move = game.chess.move(message.payload.move);
-                console.log(move);
 
                 if (!move) {
                   socket.send("wrong move send");
