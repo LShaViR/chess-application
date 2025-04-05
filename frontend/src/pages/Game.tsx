@@ -1,12 +1,12 @@
 import ChessBoard from "../component/ChessBoard";
 import Navbar from "../component/navbar";
 import RightSection from "../component/RightSection";
-import { INIT_GAME, MOVE } from "../utils/messages";
+import { MOVE } from "../utils/messages";
 import useSocket from "../hooks/useSocket";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { ShortMove } from "chess.js";
-
+import { App } from "../component/RightSectionTry";
 const Game = () => {
   const socket = useSocket();
   const game = useSelector((state: RootState) => state.game.value);
@@ -36,7 +36,7 @@ const Game = () => {
                         payload: {
                           move,
                         },
-                      })
+                      }),
                     );
                   }}
                 />
@@ -44,20 +44,23 @@ const Game = () => {
               <div className=" row-span-1"></div>
             </div>
           </div>
-          <div className="col-span-10 lg:col-span-4 bg-navbar h-screen py-8">
-            <RightSection
-              startGame={() => {
-                console.log(localStorage.getItem("tokenChess"));
-                console.log(socket);
-
-                socket.send(
-                  JSON.stringify({
-                    type: INIT_GAME,
-                  })
-                );
-              }}
-              game={game}
-            />
+          <div className="col-span-10 lg:col-span-4 bg-background h-screen py-8">
+            <div className="col-span-10 lg:col-span-4 bg-navbar h-full py-8">
+              {/*   startGame={() => { */}
+              {/*     console.log(localStorage.getItem("tokenChess")); */}
+              {/*     console.log(socket); */}
+              {/**/}
+              {/*     socket.send( */}
+              {/*       JSON.stringify({ */}
+              {/*         type: INIT_GAME, */}
+              {/*       }) */}
+              {/*     ); */}
+              {/*   }} */}
+              {/*   game={game} */}
+              {/* /> */}
+              {/* /> */}
+              <App />
+            </div>
           </div>
         </div>
       </div>
