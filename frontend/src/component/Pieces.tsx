@@ -44,7 +44,7 @@ const Pieces = ({
 
   return (
     <div
-      className="w-full aspect-square absolute left-0 top-0 grid grid-cols-8 grid-rows-8"
+      className="h-full w-full aspect-square absolute left-0 top-0 grid grid-cols-8 grid-rows-8"
       onDrop={onDrop}
       onDragOver={onDragOver}
       onClick={onClick}

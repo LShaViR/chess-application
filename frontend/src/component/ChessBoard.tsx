@@ -11,7 +11,6 @@ import {
   Square,
 } from "chess.js";
 import { useEffect, useState } from "react";
-import useMakeMove from "../hooks/useMakeMove";
 import { BoardType } from "../utils/types";
 import { isPromotion } from "../utils/helper";
 import { Promotion } from "./Promotion";
@@ -54,7 +53,7 @@ const ChessBoard = ({ onMove }: { onMove: (move: ShortMove) => void }) => {
   }, [active]);
 
   return (
-    <div className="h-full relative w-full">
+    <div className="lg:max-h-full lg:h-full aspect-square relative w-xl max-w-full max-h-full">
       {promotion.from ? (
         <Promotion
           file={orientation == "w" ? promotion.file : 7 - promotion.file}

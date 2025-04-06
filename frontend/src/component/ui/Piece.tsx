@@ -64,6 +64,7 @@ const Piece = ({
         gridColumnStart: ci + 1,
         backgroundSize: "100%",
         backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
       draggable={true}
       onDragStart={onDragStart}

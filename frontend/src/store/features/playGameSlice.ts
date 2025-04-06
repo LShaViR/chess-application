@@ -12,6 +12,7 @@ export interface PlayGameState {
       | undefined;
     gameEnd: "w" | "b" | "draw" | "";
     board: BoardType;
+    history: Move[];
   } | null;
 }
 
@@ -33,6 +34,7 @@ export const playGameSlice = createSlice({
           | undefined;
         gameEnd: "w" | "b" | "draw" | "";
         board: BoardType;
+        history: Move[];
       }>
     ) => {
       state.value = action.payload;
@@ -95,6 +97,14 @@ export const playGameSlice = createSlice({
         state.value = { ...state.value, board: action.payload };
       }
     },
+    addMoveToHistory: (state, action: PayloadAction<Move>) => {
+      if (state.value) {
+        state.value = {
+          ...state.value,
+          history: [...state.value.history, action.payload],
+        };
+      }
+    },
   },
 });
 
@@ -108,6 +118,7 @@ export const {
   setActivePiece,
   clearActivePiece,
   updateBoard,
+  addMoveToHistory,
 } = playGameSlice.actions;
 
 export default playGameSlice.reducer;

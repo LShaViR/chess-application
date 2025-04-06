@@ -1,5 +1,6 @@
 import { ChessInstance, Move, ShortMove } from "chess.js";
 import {
+  addMoveToHistory,
   clearActivePiece,
   clearCandidates,
   updateBoard,
@@ -18,8 +19,11 @@ const useMakeMove = () => {
     ) {
       console.log("move6");
 
-      chess.move(move);
-      dispatch(updateBoard(chess.board()));
+      const properMove = chess.move(move); //TODO: change name if possible
+      if (properMove) {
+        dispatch(updateBoard(chess.board()));
+        dispatch(addMoveToHistory(properMove));
+      }
       dispatch(clearCandidates());
       dispatch(clearActivePiece());
     } else {

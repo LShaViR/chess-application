@@ -48,6 +48,7 @@ export const initMessageHandler = (
               activePiece: { square: "", piece: "" },
               gameEnd: "",
               board: chessI.board(),
+              history: chessI.history({ verbose: true }),
             })
           );
 
@@ -72,6 +73,7 @@ export const initMessageHandler = (
               activePiece: { square: "", piece: "" },
               gameEnd: "",
               board: chess.board(),
+              history: chess.history({ verbose: true }),
             })
           );
           break;

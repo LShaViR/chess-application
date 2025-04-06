@@ -102,7 +102,7 @@ const BoardTiles = ({ orientation, candidates }: BoardTilesProps) => {
     return squares;
   };
   return (
-    <div className="w-full border border-dark-button relative bg-light-tile aspect-square grid grid-cols-8 grid-rows-8">
+    <div className="h-full w-full border border-dark-button relative bg-light-tile aspect-square grid grid-cols-8 grid-rows-8">
       {renderBoard()}
     </div>
   );
