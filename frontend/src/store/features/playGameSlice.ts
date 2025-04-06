@@ -1,3 +1,4 @@
+//TODO: change name for this slice and file may be board status will we a relevent name and handle some more information in this
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Move, Piece, Square } from "chess.js";
