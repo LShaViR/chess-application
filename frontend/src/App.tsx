@@ -1,3 +1,5 @@
+//TODO: make file structure better and make function at a centralize place and also write entire project in consistent css with centralize file for variable
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Game from "./pages/Game";

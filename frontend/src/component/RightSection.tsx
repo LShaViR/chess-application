@@ -1,3 +1,5 @@
+//TODO: make changes for button and add resign, draw, other features
+
 import React, { useState } from "react";
 import { renderMoves } from "../utils/frontendUtils";
 import { EXIT_GAME, INIT_GAME } from "../utils/messages";
