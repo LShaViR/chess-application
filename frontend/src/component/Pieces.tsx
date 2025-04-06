@@ -21,7 +21,7 @@ const Pieces = ({
     if (!active) {
       return;
     }
-    const [_piece, fromSquare] = e.dataTransfer.getData("text").split(",");
+    const fromSquare = active;
     const toSquare = findSquare(e, ref.current, orientation) || fromSquare;
     const move = { from: fromSquare as Square, to: toSquare as Square };
     makeMove(move);

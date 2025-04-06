@@ -102,8 +102,7 @@ export class GameManager {
                           name: player1.name,
                         },
                         player2: { id: player2.id, name: player2.name },
-                        turn:
-                          user.id == player1.id ? game?.turn[0] : game?.turn[1],
+                        turn: user.id == player1.id ? "w" : "b",
                         pgn: game.chess.pgn(),
                       },
                     })
@@ -117,8 +116,7 @@ export class GameManager {
                           name: player1.name,
                         },
                         player2: { id: player2.id, name: player2.name },
-                        turn:
-                          user.id == player1.id ? game?.turn[0] : game?.turn[1],
+                        turn: user.id == player1.id ? "w" : "b",
                       },
                     })
                   );
@@ -149,16 +147,21 @@ export class GameManager {
                   gameId: gameId,
                 });
 
+                const player1Obj = this.users.get(game.player1);
+                const player2Obj = this.users.get(game.player2);
                 pendingUser.user.socket.send(
                   JSON.stringify({
                     type: INIT_GAME,
                     payload: {
                       player1: {
-                        id: pendingUser.user.id,
-                        name: pendingUser.user.name,
+                        id: game.player1,
+                        name: player1Obj!.user!.name,
                       },
-                      player2: { id: user.id, name: user.name },
-                      turn: game.turn[0],
+                      player2: {
+                        id: game.player2,
+                        name: player2Obj!.user!.name,
+                      },
+                      turn: this.pendingUserId == game.player1 ? "w" : "b",
                     },
                   })
                 );
@@ -167,11 +170,14 @@ export class GameManager {
                     type: INIT_GAME,
                     payload: {
                       player1: {
-                        id: pendingUser.user.id,
-                        name: pendingUser.user.name,
+                        id: game.player1,
+                        name: player1Obj!.user!.name,
                       },
-                      player2: { id: user.id, name: user.name },
-                      turn: game.turn[1],
+                      player2: {
+                        id: game.player2,
+                        name: player2Obj!.user!.name,
+                      },
+                      turn: userId == game.player1 ? "w" : "b",
                     },
                   })
                 );
