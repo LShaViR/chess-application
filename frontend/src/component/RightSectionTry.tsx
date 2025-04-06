@@ -1,20 +1,46 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaPlay, FaPlus } from "react-icons/fa";
-import { BiSmile } from "react-icons/bi";
+import { Chess, Move } from "chess.js";
 
-interface ChessMove {
-  number: number;
-  white: string;
-  black: string;
-  whiteTime?: string;
-  blackTime?: string;
-}
-interface ChessGameProps {
-  moves: ChessMove[];
+interface RightSectionProps {
+  moves: Move[];
 }
 
-const RightSectionTry: React.FC<ChessGameProps> = ({ moves }) => {
-  const [message, setMessage] = useState("");
+const RightSectionTry: React.FC<RightSectionProps> = ({ moves }) => {
+  const renderMoves = (moves: Move[]) => {
+    const moveTableRow = [];
+    for (let i = 1; i < moves.length; i += 2) {
+      moveTableRow.push(
+        <tr className={`${i % 4 == 1 ? "bg-navbar" : "bg-background"}`}>
+          <td className="pl-4 pr-2 text-gray-500 w-10">{(i + 1) / 2}.</td>
+          <td className="px-2">{moves[i - 1].san}</td>
+          <td className="px-2">{moves[i].san}</td>
+          {/* <td className="px-2 text-right text-gray-400 whitespace-nowrap">
+            {move.whiteTime && <div>{move.whiteTime}</div>}
+            {move.blackTime && <div>{move.blackTime}</div>}
+          </td> */}
+        </tr>
+      );
+    }
+    if (moves.length % 2 == 1) {
+      moveTableRow.push(
+        <tr
+          className={`${moves.length % 4 == 1 ? "bg-navbar" : "bg-background"}`}
+        >
+          <td className="pl-4 pr-2 text-gray-500 w-10">
+            {(moves.length + 1) / 2}.
+          </td>
+          <td className="px-2">{moves[moves.length - 1].san}</td>
+          <td className="px-2"></td>
+          {/* <td className="px-2 text-right text-gray-400 whitespace-nowrap">
+            {move.whiteTime && <div>{move.whiteTime}</div>}
+            {move.blackTime && <div>{move.blackTime}</div>}
+          </td> */}
+        </tr>
+      );
+    }
+    return moveTableRow;
+  };
 
   return (
     <div className="flex flex-col h-full max-w-md mx-auto bg-rightsection border-y-2 border-background text-gray-200">
@@ -32,22 +58,7 @@ const RightSectionTry: React.FC<ChessGameProps> = ({ moves }) => {
       {/* Moves List */}
       <div className=" overflow-y-auto px-4 h-96">
         <table className="w-full text-xs ">
-          <tbody>
-            {moves.map((move, index) => (
-              <tr
-                key={move.number}
-                className={`${index % 2 == 0 ? "bg-navbar" : "bg-background"}`}
-              >
-                <td className="pl-4 pr-2 text-gray-500 w-10">{move.number}.</td>
-                <td className="px-2">{move.white}</td>
-                <td className="px-2">{move.black}</td>
-                <td className="px-2 text-right text-gray-400 whitespace-nowrap">
-                  {move.whiteTime && <div>{move.whiteTime}</div>}
-                  {move.blackTime && <div>{move.blackTime}</div>}
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          <tbody>{renderMoves(moves)}</tbody>
         </table>
       </div>
 
@@ -62,22 +73,6 @@ const RightSectionTry: React.FC<ChessGameProps> = ({ moves }) => {
           <span>Resign</span>
         </button>
       </div>
-      {/* Message Input */}
-      <div className="flex-grow flex flex-col justify-between h-auto ">
-        <div className="flex-grow h-auto">messages</div>
-        <div className="flex items-center p-2  border-gray-700">
-          <input
-            type="text"
-            placeholder="Send a message..."
-            className="flex-grow bg-gray-800 text-gray-200 rounded p-2 text-sm focus:outline-none"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <button className="ml-2 text-gray-400">
-            <BiSmile size={20} />
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
@@ -86,17 +81,11 @@ export default RightSectionTry;
 
 // Usage example:
 const App = () => {
-  const gameMoves: ChessMove[] = [
-    { number: 1, white: "e4", black: "e5", blackTime: "12", whiteTime: "2" },
-    { number: 1, white: "e4", black: "e5", blackTime: "12", whiteTime: "2" },
-    { number: 1, white: "e4", black: "e5", blackTime: "12", whiteTime: "2" },
-    { number: 1, white: "e4", black: "e5", blackTime: "12", whiteTime: "2" },
-    { number: 1, white: "e4", black: "e5", blackTime: "12", whiteTime: "2" },
-    { number: 1, white: "e4", black: "e5", blackTime: "12", whiteTime: "2" },
-    { number: 1, white: "e4", black: "e5", blackTime: "12", whiteTime: "2" },
-    { number: 1, white: "e4", black: "e5", blackTime: "12", whiteTime: "2" },
-    { number: 1, white: "e4", black: "e5", blackTime: "12", whiteTime: "2" },
-  ];
+  const chess = new Chess();
+  chess.load_pgn(
+    "1. e4 c5 2. Nf3 a6 3. d3 g6 4. g3 Bg7 5. Bg2 b5 6. O-O Bb7 7. c3 e5 8. a3 Ne7 9. b4 d6 10. Nbd2 O-O 11. Nb3 Nd7 12. Be3 Rc8 13. Rc1 h6 14. Nfd2 f5 15. f4 Kh7 16. Qe2 cxb4 17. axb4 exf4 18. Bxf4 Rxc3 19. Rxc3 Bxc3 20. Bxd6 Qb6+ 21. Bc5 Nxc5 22. bxc5 Qe6 23. d4 Rd8 24. Qd3 Bxd2 25. Nxd2 fxe4 26. Nxe4 Nf5 27. d5 Qe5 28. g4 Ne7 29. Rf7+ Kg8 30. Qf1 Nxd5 31. Rxb7 Qd4+ 32. Kh1 Rf8 33. Qg1 Ne3 34. Re7 a5 35. c6 a4 36. Qxe3 Qxe3 37. Nf6+ Rxf6 38. Rxe3 Rd6 39. h4 Rd1+ 40. Kh2 b4 41. c7 1-0"
+  );
+  const gameMoves: Move[] = [...chess.history({ verbose: true })];
 
   return <RightSectionTry moves={gameMoves} />;
 };

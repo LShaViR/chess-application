@@ -6,7 +6,7 @@ import useSocket from "../hooks/useSocket";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { ShortMove } from "chess.js";
-import { App } from "../component/RightSectionTry";
+import RightSectionTry, { App } from "../component/RightSectionTry";
 const Game = () => {
   const socket = useSocket();
   const game = useSelector((state: RootState) => state.game.value);
@@ -36,7 +36,7 @@ const Game = () => {
                         payload: {
                           move,
                         },
-                      }),
+                      })
                     );
                   }}
                 />
@@ -59,7 +59,7 @@ const Game = () => {
               {/*   game={game} */}
               {/* /> */}
               {/* /> */}
-              <App />
+              <RightSectionTry moves={game?.chess.history({ verbose: true })} />
             </div>
           </div>
         </div>
