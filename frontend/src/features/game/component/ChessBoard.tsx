@@ -1,9 +1,9 @@
 //Remove game state from this page and put it into game page
 
 import { useSelector } from "react-redux";
-import Pieces from "./Pieces";
-import BoardTiles from "./ui/BoardTiles";
-import { RootState } from "../store/store";
+import Pieces from "../../../component/chessboard/Pieces";
+import BoardTiles from "./BoardTiles";
+import { RootState } from "../../../store/store";
 import {
   Chess,
   ChessInstance,
@@ -13,10 +13,10 @@ import {
   Square,
 } from "chess.js";
 import { useEffect, useState } from "react";
-import { BoardType } from "../utils/types";
-import { isPromotion } from "../utils/helper";
-import { Promotion } from "./Promotion";
-import { filesArr } from "../utils/constant";
+import { BoardType } from "../../../utils/types";
+import { isPromotion } from "../../../utils/helper";
+import { Promotion } from "../../../component/chessboard/Promotion";
+import { filesArr } from "../../../utils/constant";
 
 const ChessBoard = ({ onMove }: { onMove: (move: ShortMove) => void }) => {
   const playGame = useSelector((state: RootState) => state.playGame.value);

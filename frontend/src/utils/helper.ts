@@ -1,4 +1,4 @@
-import { ChessInstance, Square } from "chess.js";
+import { ChessInstance, Piece, Square } from "chess.js";
 import { filesArr, ranks } from "./constant";
 import { MoveType } from "./types";
 
@@ -38,15 +38,20 @@ export const isValidMove = (move: MoveType, candidates?: MoveType[]) => {
   return ans;
 };
 
-export const isPromotion = (
-  chess: ChessInstance,
-  { from, to }: { from: Square; to: Square }
-) => {
-  return chess
-    .moves({ verbose: true, square: from })
-    .reduce(
-      (promotion, current) =>
-        promotion || (current.promotion ? true : false && current.to == to),
-      false
-    );
+export const isPromotion = ({
+  from,
+  to,
+  piece,
+}: {
+  from: Square;
+  to: Square;
+  piece: Piece; //TODO: change type from chess.js to local
+}) => {
+  if (piece.type != "p") {
+    return false;
+  } else {
+    if (to.endsWith("8") || to.endsWith("1")) {
+      return true;
+    }
+  }
 };

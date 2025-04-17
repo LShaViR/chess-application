@@ -3,7 +3,7 @@
 
 import { ShortMove } from "chess.js";
 
-import ChessBoard from "../component/ChessBoard";
+import ChessBoard from "../component/chessboard/ChessBoard";
 import Navbar from "../component/navbar";
 import { MOVE } from "../utils/messages";
 import useSocket from "../hooks/useSocket";

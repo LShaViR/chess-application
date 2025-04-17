@@ -1,9 +1,8 @@
 import { useRef } from "react";
-import { PiecesProps } from "../utils/types";
-import { BLACK } from "../utils/constant";
-import Piece from "./ui/Piece";
-import { findSquare } from "../utils/helper";
-import { Square } from "chess.js";
+import { BLACK, Square } from "chess.js";
+import { PiecesProps } from "../../utils/types";
+import { findSquare } from "../../utils/helper";
+import Piece from "./Piece";
 
 const Pieces = ({
   disable,
