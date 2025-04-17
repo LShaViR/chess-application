@@ -1,3 +1,5 @@
+//TODO: improve file structuring and remove console.log from all files
+
 import { WebSocketServer, WebSocket } from "ws";
 import http from "http";
 import { GameManager } from "./GameManager";

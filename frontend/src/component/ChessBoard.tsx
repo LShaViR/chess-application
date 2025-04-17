@@ -1,3 +1,5 @@
+//Remove game state from this page and put it into game page
+
 import { useSelector } from "react-redux";
 import Pieces from "./Pieces";
 import BoardTiles from "./ui/BoardTiles";
@@ -18,18 +20,18 @@ import { filesArr } from "../utils/constant";
 
 const ChessBoard = ({ onMove }: { onMove: (move: ShortMove) => void }) => {
   const playGame = useSelector((state: RootState) => state.playGame.value);
-  const game = useSelector((state: RootState) => state.game.value);
+  const game = useSelector((state: RootState) => state.game.value); //TODO: make it prop
   const [active, setActive] = useState<Square | "">("");
   const [candidates, setCandidates] = useState<Move[]>([]);
-  const [turn, setTurn] = useState<"w" | "b">("w");
-  const [chess, setChess] = useState<ChessInstance>(new Chess());
+  const [turn, setTurn] = useState<"w" | "b">("w"); //TODO: make it prop
+  const [chess, setChess] = useState<ChessInstance>(new Chess()); //TODO: take this from prop
   const [board, setBoard] = useState<BoardType>(new Chess().board());
   const [promotion, setPromotion] = useState<{
     file: number;
     from?: Square | undefined;
     to?: Square | undefined;
   }>({ file: -1 });
-  const [orientation, setOrientation] = useState<"w" | "b">("w");
+  const [orientation, setOrientation] = useState<"w" | "b">("w"); //TODO: make it prop
 
   useEffect(() => {
     if (game) {
@@ -48,7 +50,7 @@ const ChessBoard = ({ onMove }: { onMove: (move: ShortMove) => void }) => {
 
   useEffect(() => {
     if (active) {
-      setCandidates(chess.moves({ verbose: true, square: active }));
+      setCandidates(chess.moves({ verbose: true, square: active })); //TODO: change this to global state (play game state)
     }
   }, [active]);
 

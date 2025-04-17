@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import SideNavbar from "../component/navbar";
+import Navbar from "../component/navbar";
 import Logo from "../component/ui/logo";
 
 const Home = () => {
@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div className="grid grid-cols-21 h-screen">
       <div className="col-span-1 bg-navbar">
-        <SideNavbar />
+        <Navbar />
       </div>
       <div className="col-span-10 bg-background grid justify-center items-center">
         <img src="/chessBoard.png" alt="" />

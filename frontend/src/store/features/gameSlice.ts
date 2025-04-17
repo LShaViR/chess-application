@@ -30,7 +30,7 @@ export const gameSlice = createSlice({
         gameStatus: "running" | "white_wins" | "black_wins" | "draw";
         gameId: string;
         chess: ChessInstance;
-      }>
+      }>,
     ) => {
       state.value = action.payload;
     },
@@ -38,7 +38,7 @@ export const gameSlice = createSlice({
       state,
       action: PayloadAction<{
         gameStatus: "running" | "white_wins" | "black_wins" | "draw";
-      }>
+      }>,
     ) => {
       if (state.value) {
         state.value = { ...state.value, gameStatus: action.payload.gameStatus };

@@ -1,9 +1,14 @@
+//TODO: make changes such that game id will shown on url query parameter
+//TODO: make premove logic (store que on frontend only)
+
+import { ShortMove } from "chess.js";
+
 import ChessBoard from "../component/ChessBoard";
 import Navbar from "../component/navbar";
 import { MOVE } from "../utils/messages";
 import useSocket from "../hooks/useSocket";
-import { ShortMove } from "chess.js";
 import RightSection from "../component/RightSection";
+
 const Game = () => {
   const socket = useSocket();
 

@@ -1,4 +1,5 @@
 "use strict";
+//TODO: authenticated /me route have to be build
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };

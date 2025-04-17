@@ -13,7 +13,7 @@ export interface PlayGameState {
       | undefined;
     gameEnd: "w" | "b" | "draw" | "";
     board: BoardType;
-    history: Move[];
+    history: Move[]; //TODO: Change type
   } | null;
 }
 
@@ -103,6 +103,17 @@ export const playGameSlice = createSlice({
         state.value = {
           ...state.value,
           history: [...state.value.history, action.payload],
+        };
+      }
+    },
+    gameOver: (
+      state,
+      action: PayloadAction<{ gameEnd: "draw" | "w" | "b" }>
+    ) => {
+      if (state.value) {
+        state.value = {
+          ...state.value,
+          gameEnd: action.payload.gameEnd,
         };
       }
     },

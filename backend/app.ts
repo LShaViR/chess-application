@@ -1,3 +1,5 @@
+//TODO: authenticated /me route have to be build
+
 import express from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";

@@ -17,8 +17,8 @@ export const initMessageHandler = (
   makeMove: (
     move: ShortMove | Move,
     chess: ChessInstance,
-    turn: "w" | "b"
-  ) => void
+    turn: "w" | "b",
+  ) => void,
 ) => {
   return (data: string) => {
     console.log(data);
@@ -28,7 +28,6 @@ export const initMessageHandler = (
       const message = JSON.parse(data);
       const payload = message.payload;
       console.log(message);
-      console.log("india\nindia\nindia\nindia\nindia\n");
 
       switch (message.type) {
         case INIT_GAME:
@@ -40,7 +39,7 @@ export const initMessageHandler = (
               gameStatus: "running",
               gameId: payload.gameId,
               chess: chessI,
-            })
+            }),
           );
           dispatch(
             newPlayGame({
@@ -49,7 +48,7 @@ export const initMessageHandler = (
               gameEnd: "",
               board: chessI.board(),
               history: chessI.history({ verbose: true }),
-            })
+            }),
           );
 
           break;
@@ -65,7 +64,7 @@ export const initMessageHandler = (
               gameStatus: "running",
               gameId: payload.gameId,
               chess: chess,
-            })
+            }),
           );
           dispatch(
             newPlayGame({
@@ -74,7 +73,7 @@ export const initMessageHandler = (
               gameEnd: "",
               board: chess.board(),
               history: chess.history({ verbose: true }),
-            })
+            }),
           );
           break;
         case OPPONENT_DISCONNECTED: //TODO: to be implemented
