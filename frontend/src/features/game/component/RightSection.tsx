@@ -1,11 +1,15 @@
 //TODO: make changes for button and add resign, draw, other features
 
+//TODO: put svg in different component
+
+//TODO: make ui cleaner
+
 import React, { useState } from "react";
-import { renderMoves } from "../utils/frontendUtils";
-import { EXIT_GAME, INIT_GAME } from "../utils/messages";
+import { renderMoves } from "../utils/moveTable";
+import { EXIT_GAME, INIT_GAME } from "../../../utils/messages";
 import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
-import { PlayButton } from "./ui/playButton";
+import { RootState } from "../../../store/store";
+import { PlayButton } from "../../../component/ui/playButton";
 
 interface RightSectionProps {
   socket: WebSocket;

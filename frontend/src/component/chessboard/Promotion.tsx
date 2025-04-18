@@ -1,12 +1,12 @@
-import { PieceType } from "chess.js";
+import { Piece, PieceType } from "chess.js";
 
 const Promotion = ({
   file,
-  turn,
+  piece,
   makeMove,
 }: {
   file: number;
-  turn: "w" | "b";
+  piece: Piece; //TODO: change type
   makeMove: (option: Exclude<PieceType, "p" | "k">) => void;
 }) => {
   const optionArr = ["q", "n", "r", "b"];
@@ -20,7 +20,6 @@ const Promotion = ({
     >
       {optionArr.map((option, index) => {
         const isBlack = (file + index) % 2 === 1;
-        const piece = turn + option;
         return (
           <div
             key={index}
@@ -34,7 +33,9 @@ const Promotion = ({
             <div
               className={`w-full h-full z-30}`}
               style={{
-                backgroundImage: piece ? `url('/assets/${piece}.png')` : "",
+                backgroundImage: piece
+                  ? `url('/assets/${piece.color + piece.type}.png')`
+                  : "",
                 gridRowStart: index + 1,
                 backgroundSize: "100%",
                 backgroundPosition: "center",

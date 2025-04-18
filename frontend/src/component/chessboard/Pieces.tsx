@@ -8,7 +8,7 @@ const Pieces = ({
   disable,
   orientation,
   active,
-  setActive,
+  onActive,
   board,
   makeMove,
 }: PiecesProps) => {
@@ -20,20 +20,28 @@ const Pieces = ({
     if (!active) {
       return;
     }
-    const fromSquare = active;
+    const fromSquare = active.square;
     const toSquare = findSquare(e, ref.current, orientation) || fromSquare;
-    const move = { from: fromSquare as Square, to: toSquare as Square };
+    const move = {
+      from: fromSquare as Square,
+      to: toSquare as Square,
+      piece: active.piece,
+    };
     makeMove(move);
     console.log("onDrop2");
   };
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const fromSquare = active;
+    const fromSquare = active?.square;
     if (!fromSquare) {
       return;
     }
     const toSquare = findSquare(e, ref.current, orientation) || fromSquare;
-    const move = { from: fromSquare as Square, to: toSquare as Square };
+    const move = {
+      from: fromSquare as Square,
+      to: toSquare as Square,
+      piece: active.piece,
+    };
     makeMove(move);
   };
 
@@ -64,7 +72,7 @@ const Pieces = ({
                 orientation={orientation}
                 piece={piece}
                 square={board[rowI][colI]!.square}
-                setActive={!disable ? setActive : (_square) => {}}
+                onActive={!disable ? onActive : (_square) => {}}
               />
             );
           } else {

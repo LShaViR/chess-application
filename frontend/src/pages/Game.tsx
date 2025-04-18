@@ -3,11 +3,12 @@
 
 import { ShortMove } from "chess.js";
 
-import ChessBoard from "../component/chessboard/ChessBoard";
+import ChessBoard from "../component/ChessBoard";
 import Navbar from "../component/navbar";
 import { MOVE } from "../utils/messages";
 import useSocket from "../hooks/useSocket";
-import RightSection from "../component/RightSection";
+import RightSection from "../features/game/component/RightSection";
+import GameBoard from "../features/game/component/GameBoard";
 
 const Game = () => {
   const socket = useSocket();
@@ -27,7 +28,7 @@ const Game = () => {
             <div className="grid grid-rows-12 grid-cols-1 h-screen py-8 w-full">
               <div className=" row-span-1"></div>
               <div className="row-span-10 flex flex-col justify-center w-full items-center">
-                <ChessBoard
+                <GameBoard
                   onMove={(move: ShortMove) => {
                     console.log(move);
 
@@ -40,6 +41,7 @@ const Game = () => {
                       })
                     );
                   }}
+                  orientation="w"
                 />
               </div>
               <div className=" row-span-1"></div>

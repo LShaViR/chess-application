@@ -8,3 +8,6 @@ export const FINISHED = "finished";
 export const UNFINISHED = "unfinished";
 // export const ranksArr: number[] = new Array(8).fill(0).map((_rank, i) => i + 1);
 export const filesArr: string[] = "abcdefgh".split("");
+
+export const defaultBoardFEN: string = //TODO: change type to some strict type
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";

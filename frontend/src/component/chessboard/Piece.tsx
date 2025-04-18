@@ -1,16 +1,17 @@
-import { Square } from "chess.js";
+import { Piece, PieceType, Square } from "chess.js";
 import { BLACK, filesArr, WHITE } from "../../utils/constant";
+import { ActivePiece } from "../../utils/types";
 
-const Piece = ({
+const PieceComponent = ({
   orientation,
   piece,
   square,
-  setActive,
+  onActive,
 }: {
   orientation: "w" | "b";
   piece: string;
   square: Square;
-  setActive: (square: Square | "") => void;
+  onActive: (active: ActivePiece) => void; //TODO: change type
 }) => {
   const ci =
     orientation == WHITE
@@ -21,7 +22,10 @@ const Piece = ({
 
   const actPiece = () => {
     if (piece[0] === orientation) {
-      setActive(square);
+      onActive({
+        square,
+        piece: { color: piece[0], type: piece[1] as PieceType },
+      }); //TODO: fix this
       console.log("onDragStart5");
     }
   };
@@ -47,7 +51,6 @@ const Piece = ({
     console.log("onDragEnd1");
     const element = e.target as HTMLDivElement;
     element.style.display = "block";
-    setActive("");
     console.log("onDragEnd2");
   };
   return (
@@ -70,4 +73,4 @@ const Piece = ({
   );
 };
 
-export default Piece;
+export default PieceComponent;

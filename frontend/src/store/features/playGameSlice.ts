@@ -7,12 +7,9 @@ import { BoardType } from "../../utils/types";
 export interface PlayGameState {
   value: {
     candidates: Move[];
-    activePiece: { square: Square | ""; piece: Piece | "" };
-    promotion?:
-      | { file: number; rank: number; from: Square; to: Square }
-      | undefined;
+    activePiece: { square: Square; piece: Piece } | null;
     gameEnd: "w" | "b" | "draw" | "";
-    board: BoardType;
+    boardFEN: string; //TODO: make FEN type using zod
     history: Move[]; //TODO: Change type
   } | null;
 }
@@ -29,12 +26,9 @@ export const playGameSlice = createSlice({
       state,
       action: PayloadAction<{
         candidates: Move[];
-        activePiece: { square: Square | ""; piece: Piece | "" };
-        promotion?:
-          | { file: number; rank: number; from: Square; to: Square }
-          | undefined;
+        activePiece: { square: Square; piece: Piece } | null;
         gameEnd: "w" | "b" | "draw" | "";
-        board: BoardType;
+        boardFEN: string;
         history: Move[];
       }>
     ) => {
@@ -43,7 +37,7 @@ export const playGameSlice = createSlice({
     setActivePiece: (
       state,
       action: PayloadAction<{
-        activePiece: { square: Square | ""; piece: Piece | "" };
+        activePiece: { square: Square; piece: Piece } | null;
       }>
     ) => {
       if (state.value) {
@@ -57,7 +51,7 @@ export const playGameSlice = createSlice({
       if (state.value) {
         state.value = {
           ...state.value,
-          activePiece: { square: "", piece: "" },
+          activePiece: null,
         };
       }
     },
@@ -76,26 +70,10 @@ export const playGameSlice = createSlice({
         state.value = { ...state.value, candidates: [] };
       }
     },
-    promotionUpdate: (
-      state,
-      action: PayloadAction<{
-        file: number;
-        rank: number;
-        from: Square;
-        to: Square;
-      }>
-    ) => {
-      if (state.value)
-        state.value = { ...state.value, promotion: action.payload };
-    },
-    promotionAction: (state) => {
+
+    updateBoard: (state, action: PayloadAction<string>) => {
       if (state.value) {
-        state.value = { ...state.value, promotion: undefined };
-      }
-    },
-    updateBoard: (state, action: PayloadAction<BoardType>) => {
-      if (state.value) {
-        state.value = { ...state.value, board: action.payload };
+        state.value = { ...state.value, boardFEN: action.payload };
       }
     },
     addMoveToHistory: (state, action: PayloadAction<Move>) => {
@@ -125,8 +103,6 @@ export const {
   newPlayGame,
   generateCandidates,
   clearCandidates,
-  promotionAction,
-  promotionUpdate,
   setActivePiece,
   clearActivePiece,
   updateBoard,

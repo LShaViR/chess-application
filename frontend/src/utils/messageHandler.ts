@@ -17,8 +17,8 @@ export const initMessageHandler = (
   makeMove: (
     move: ShortMove | Move,
     chess: ChessInstance,
-    turn: "w" | "b",
-  ) => void,
+    turn: "w" | "b"
+  ) => void
 ) => {
   return (data: string) => {
     console.log(data);
@@ -39,16 +39,16 @@ export const initMessageHandler = (
               gameStatus: "running",
               gameId: payload.gameId,
               chess: chessI,
-            }),
+            })
           );
           dispatch(
             newPlayGame({
               candidates: [],
-              activePiece: { square: "", piece: "" },
+              activePiece: { square: "", piece: null },
               gameEnd: "",
               board: chessI.board(),
               history: chessI.history({ verbose: true }),
-            }),
+            })
           );
 
           break;
@@ -64,16 +64,16 @@ export const initMessageHandler = (
               gameStatus: "running",
               gameId: payload.gameId,
               chess: chess,
-            }),
+            })
           );
           dispatch(
             newPlayGame({
               candidates: [],
-              activePiece: { square: "", piece: "" },
+              activePiece: { square: "", piece: null },
               gameEnd: "",
               board: chess.board(),
               history: chess.history({ verbose: true }),
-            }),
+            })
           );
           break;
         case OPPONENT_DISCONNECTED: //TODO: to be implemented
