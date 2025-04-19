@@ -1,5 +1,5 @@
 import { PieceType, Square } from "chess.js"; // TODO: Change this
-import { BoardType } from "../types";
+import { BoardType } from "../../types/board";
 
 const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
 

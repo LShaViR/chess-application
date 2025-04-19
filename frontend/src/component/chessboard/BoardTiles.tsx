@@ -1,11 +1,5 @@
-import { Move } from "chess.js";
 import { WHITE } from "../../utils/constant";
-import { MoveType } from "../../utils/types";
-
-export type BoardTilesProps = {
-  orientation: "w" | "b";
-  candidates: Move[]; //TODO: change type
-};
+import { BoardTilesProps } from "../../types/board";
 
 const BoardTiles = ({ orientation, candidates }: BoardTilesProps) => {
   const size = 8;

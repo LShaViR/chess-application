@@ -2,31 +2,25 @@
 
 import Pieces from "./chessboard/Pieces";
 import BoardTiles from "./chessboard/BoardTiles";
-import { Move, Piece, PieceType, ShortMove, Square } from "chess.js";
-import { useState } from "react";
+import { Piece, PieceType, Square } from "chess.js";
 import { isPromotion } from "../utils/helper";
 import { Promotion } from "./chessboard/Promotion";
 import { filesArr } from "../utils/constant";
 import { fenToBoard } from "../utils/chess/fenToBoard";
-import { ActivePiece, MoveType } from "../utils/types";
+import { ChessBoardProps } from "../types/board";
+
+import { useState } from "react";
 
 const ChessBoard = ({
   onMove,
   onActive,
   orientation,
+  turn,
   active, //TODO: think if it is required or not
   boardFEN,
   disable,
   candidates,
-}: {
-  onMove: (move: ShortMove) => void;
-  active: ActivePiece;
-  onActive: (active: ActivePiece) => void;
-  orientation: "w" | "b";
-  boardFEN: string; //TODO: check if it is valid fen or not
-  disable: boolean;
-  candidates: Move[]; //TODO: change move type
-}) => {
+}: ChessBoardProps) => {
   const [promotion, setPromotion] = useState<{
     file: number;
     from?: Square | undefined;
@@ -61,9 +55,10 @@ const ChessBoard = ({
         <Pieces
           disable={disable}
           orientation={orientation}
+          turn={turn}
           active={active}
           onActive={onActive}
-          makeMove={(move: { from: Square; to: Square; piece: Piece }) => {
+          onMovePieces={(move: { from: Square; to: Square; piece: Piece }) => {
             //TODO: make required changes
             //TODO: change shortmove type
             if (isPromotion(move)) {

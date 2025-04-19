@@ -2,7 +2,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Move, Piece, Square } from "chess.js";
-import { BoardType } from "../../utils/types";
 
 export interface PlayGameState {
   value: {

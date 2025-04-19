@@ -18,7 +18,7 @@ const useSocket = () => {
     };
     newSocket.onmessage = async (message) => {
       console.log("message");
-      console.log(message);
+      // console.log(message);
 
       await messageHandler(message.data);
     };

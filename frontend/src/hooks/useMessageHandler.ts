@@ -14,10 +14,15 @@ const useMessageHandler = () => {
   );
 
   useEffect(() => {
-    if (game)
+    console.log("game render");
+
+    if (game) {
+      console.log(game.chess.fen());
+
       setMessageHandler(() =>
-        initMessageHandler(game?.chess, dispatch, makeMove)
+        initMessageHandler(game.chess, dispatch, makeMove)
       );
+    }
   }, [game]);
   //   const playGame = useSelector((state: RootState) => state.playGame.value);
 

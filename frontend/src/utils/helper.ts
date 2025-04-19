@@ -1,6 +1,6 @@
 import { Piece, Square } from "chess.js";
 import { filesArr, ranks } from "./constant";
-import { ShortMoveType } from "./types";
+import { ShortMoveType } from "../types/board";
 
 export const findSquare = (
   e: any,
@@ -29,11 +29,11 @@ export const isValidMove = (
   move: ShortMoveType,
   candidates?: ShortMoveType[]
 ) => {
-  console.log("isValidMove1");
+  // console.log("isValidMove1");
   let ans = false;
   candidates?.forEach((candi) => {
     if (candi.from == move.from && candi.to == move.to) {
-      console.log("isValidMove2");
+      // console.log("isValidMove2");
       ans = true;
       return;
     }

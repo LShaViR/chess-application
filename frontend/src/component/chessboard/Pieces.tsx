@@ -1,21 +1,22 @@
 import { useRef } from "react";
 import { BLACK, Square } from "chess.js";
-import { PiecesProps } from "../../utils/types";
+import { PiecesProps } from "../../types/board";
 import { findSquare } from "../../utils/helper";
 import Piece from "./Piece";
 
 const Pieces = ({
   disable,
   orientation,
+  turn,
   active,
   onActive,
   board,
-  makeMove,
+  onMovePieces,
 }: PiecesProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const onDrop = (e: React.DragEvent) => {
-    console.log("onDrop1");
+    // console.log("onDrop1");
     e.preventDefault();
     if (!active) {
       return;
@@ -27,8 +28,8 @@ const Pieces = ({
       to: toSquare as Square,
       piece: active.piece,
     };
-    makeMove(move);
-    console.log("onDrop2");
+    onMovePieces(move);
+    // console.log("onDrop2");
   };
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -42,7 +43,7 @@ const Pieces = ({
       to: toSquare as Square,
       piece: active.piece,
     };
-    makeMove(move);
+    onMovePieces(move);
   };
 
   const onDragOver = (e: React.DragEvent) => {
@@ -70,6 +71,7 @@ const Pieces = ({
               <Piece
                 key={ri * 8 + ci}
                 orientation={orientation}
+                turn={turn}
                 piece={piece}
                 square={board[rowI][colI]!.square}
                 onActive={!disable ? onActive : (_square) => {}}

@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { ChessInstance } from "chess.js";
+import { Turn } from "../../types/board";
+import { GameStatus } from "../../types/game";
 
 export interface GameState {
   value: {
     player1: string;
     player2: string;
-    turn: "w" | "b";
-    gameStatus: "running" | "white_wins" | "black_wins" | "draw";
+    turn: Turn;
+    gameStatus: GameStatus;
     gameId: string;
     chess: ChessInstance;
   } | null;
@@ -26,8 +28,8 @@ export const gameSlice = createSlice({
       action: PayloadAction<{
         player1: string;
         player2: string;
-        turn: "w" | "b";
-        gameStatus: "running" | "white_wins" | "black_wins" | "draw";
+        turn: Turn;
+        gameStatus: GameStatus;
         gameId: string;
         chess: ChessInstance;
       }>
@@ -37,7 +39,7 @@ export const gameSlice = createSlice({
     updateGame: (
       state,
       action: PayloadAction<{
-        gameStatus: "running" | "white_wins" | "black_wins" | "draw";
+        gameStatus: GameStatus;
       }>
     ) => {
       if (state.value) {

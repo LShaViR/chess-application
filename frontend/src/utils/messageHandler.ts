@@ -10,6 +10,7 @@ import {
 import { newGame, updateGame } from "../store/features/gameSlice";
 import { newPlayGame } from "../store/features/playGameSlice";
 import { Dispatch, UnknownAction } from "@reduxjs/toolkit";
+import { GameStatus } from "../types/game";
 
 export const initMessageHandler = (
   chessI: ChessInstance,
@@ -21,7 +22,7 @@ export const initMessageHandler = (
   ) => void
 ) => {
   return (data: string) => {
-    console.log(data);
+    // console.log(data);
 
     //TODO: type fixing have to be done
     try {
@@ -36,7 +37,7 @@ export const initMessageHandler = (
               player1: payload.player1.name,
               player2: payload.player2.name,
               turn: payload.turn,
-              gameStatus: "running",
+              gameStatus: GameStatus.RUNNING,
               gameId: payload.gameId,
               chess: chessI,
             })
@@ -44,15 +45,17 @@ export const initMessageHandler = (
           dispatch(
             newPlayGame({
               candidates: [],
-              activePiece: { square: "", piece: null },
+              activePiece: null,
               gameEnd: "",
-              board: chessI.board(),
+              boardFEN: chessI.fen(),
               history: chessI.history({ verbose: true }),
             })
           );
 
           break;
         case JOIN_AGAIN:
+          console.log("joingame");
+
           const chess = new Chess();
           chess.load_pgn(payload.pgn);
 
@@ -61,7 +64,7 @@ export const initMessageHandler = (
               player1: payload.player1.name,
               player2: payload.player2.name,
               turn: payload.turn,
-              gameStatus: "running",
+              gameStatus: GameStatus.RUNNING,
               gameId: payload.gameId,
               chess: chess,
             })
@@ -69,9 +72,9 @@ export const initMessageHandler = (
           dispatch(
             newPlayGame({
               candidates: [],
-              activePiece: { square: "", piece: null },
+              activePiece: null,
               gameEnd: "",
-              board: chess.board(),
+              boardFEN: chess.fen(),
               history: chess.history({ verbose: true }),
             })
           );

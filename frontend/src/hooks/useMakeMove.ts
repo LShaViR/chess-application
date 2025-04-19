@@ -12,7 +12,8 @@ const useMakeMove = () => {
   const dispatch = useDispatch();
 
   return (move: ShortMove | Move, chess: ChessInstance, turn: "w" | "b") => {
-    console.log("move1");
+    console.log("move1", move, turn, chess.turn(), chess.fen());
+
     if (
       turn == chess.turn() &&
       isValidMove(move, chess.moves({ square: move.from, verbose: true }))
@@ -21,7 +22,7 @@ const useMakeMove = () => {
 
       const properMove = chess.move(move); //TODO: change name if possible
       if (properMove) {
-        dispatch(updateBoard(chess.board()));
+        dispatch(updateBoard(chess.fen()));
         dispatch(addMoveToHistory(properMove));
       }
       dispatch(clearCandidates());

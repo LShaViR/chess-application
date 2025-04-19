@@ -7,7 +7,7 @@ const renderMoves = (moves: Move[]): React.ReactElement[] => {
   const moveTableRow: React.ReactElement[] = [];
   for (let i = 1; i < moves.length; i += 2) {
     moveTableRow.push(
-      <tr className={`${i % 4 == 1 ? "bg-navbar" : "bg-background"}`}>
+      <tr key={i} className={`${i % 4 == 1 ? "bg-navbar" : "bg-background"}`}>
         <td className="pl-4 pr-2 text-gray-500 w-10">{(i + 1) / 2}.</td>
         <td className="px-2">{moves[i - 1].san}</td>
         <td className="px-2">{moves[i].san}</td>
@@ -17,6 +17,7 @@ const renderMoves = (moves: Move[]): React.ReactElement[] => {
   if (moves.length % 2 == 1) {
     moveTableRow.push(
       <tr
+        key={moves.length}
         className={`${moves.length % 4 == 1 ? "bg-navbar" : "bg-background"}`}
       >
         <td className="pl-4 pr-2 text-gray-500 w-10">

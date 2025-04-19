@@ -1,17 +1,18 @@
 //TODO: make changes such that game id will shown on url query parameter
 //TODO: make premove logic (store que on frontend only)
 
-import { ShortMove } from "chess.js";
-
-import ChessBoard from "../component/ChessBoard";
 import Navbar from "../component/navbar";
 import { MOVE } from "../utils/messages";
-import useSocket from "../hooks/useSocket";
+import useSocket from "../hooks/useSocket"; //TODO: change code for this
 import RightSection from "../features/game/component/RightSection";
 import GameBoard from "../features/game/component/GameBoard";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { Color, ShortMoveType } from "../types/board";
 
 const Game = () => {
-  const socket = useSocket();
+  const socket = useSocket(); //TODO: make major changes for this
+  const game = useSelector((state: RootState) => state.game.value);
 
   if (!socket) {
     return;
@@ -29,8 +30,9 @@ const Game = () => {
               <div className=" row-span-1"></div>
               <div className="row-span-10 flex flex-col justify-center w-full items-center">
                 <GameBoard
-                  onMove={(move: ShortMove) => {
+                  onMove={(move: ShortMoveType) => {
                     console.log(move);
+                    console.log("onMove in game");
 
                     socket.send(
                       JSON.stringify({
@@ -41,7 +43,9 @@ const Game = () => {
                       })
                     );
                   }}
-                  orientation="w"
+                  orientation={game?.turn || Color.WHITE} //TODO: make other state for orientation
+                  turn={game?.turn || Color.WHITE}
+                  chess={game?.chess}
                 />
               </div>
               <div className=" row-span-1"></div>

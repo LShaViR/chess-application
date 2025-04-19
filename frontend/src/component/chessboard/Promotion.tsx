@@ -1,14 +1,6 @@
-import { Piece, PieceType } from "chess.js";
+import { PromotionProps } from "../../types/board";
 
-const Promotion = ({
-  file,
-  piece,
-  makeMove,
-}: {
-  file: number;
-  piece: Piece; //TODO: change type
-  makeMove: (option: Exclude<PieceType, "p" | "k">) => void;
-}) => {
+const Promotion = ({ file, piece, makeMove }: PromotionProps) => {
   const optionArr = ["q", "n", "r", "b"];
 
   return (
