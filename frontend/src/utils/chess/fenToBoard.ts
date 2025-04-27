@@ -1,4 +1,4 @@
-import { PieceType, Square } from "chess.js"; // TODO: Change this
+import { PieceType, Square } from "../../types/chess";
 import { BoardType } from "../../types/board";
 
 const files = ["a", "b", "c", "d", "e", "f", "g", "h"];

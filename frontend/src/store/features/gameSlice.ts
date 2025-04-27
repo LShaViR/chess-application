@@ -11,7 +11,6 @@ export interface GameState {
     turn: Turn;
     gameStatus: GameStatus;
     gameId: string;
-    chess: ChessInstance;
   } | null;
 }
 
@@ -31,7 +30,6 @@ export const gameSlice = createSlice({
         turn: Turn;
         gameStatus: GameStatus;
         gameId: string;
-        chess: ChessInstance;
       }>
     ) => {
       state.value = action.payload;

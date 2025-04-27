@@ -1,5 +1,6 @@
 //TODO: make changes such that game id will shown on url query parameter
 //TODO: make premove logic (store que on frontend only)
+//TODO: fix error hooks sequence and wrap component in error boundary
 
 import Navbar from "../component/navbar";
 import { MOVE } from "../utils/messages";
@@ -9,13 +10,16 @@ import GameBoard from "../features/game/component/GameBoard";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { Color, ShortMoveType } from "../types/board";
+import useMessageHandler from "../features/game/hooks/useMessageHandler";
 
 const Game = () => {
-  const socket = useSocket(); //TODO: make major changes for this
   const game = useSelector((state: RootState) => state.game.value);
-
-  if (!socket) {
-    return;
+  const socket = useSocket(); //TODO: make major changes for this
+  if (socket) {
+    //TODO: find better thing for that
+    useMessageHandler(socket);
+  } else {
+    return <></>;
   }
 
   return (
@@ -45,7 +49,6 @@ const Game = () => {
                   }}
                   orientation={game?.turn || Color.WHITE} //TODO: make other state for orientation
                   turn={game?.turn || Color.WHITE}
-                  chess={game?.chess}
                 />
               </div>
               <div className=" row-span-1"></div>

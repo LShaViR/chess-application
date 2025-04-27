@@ -1,8 +1,10 @@
-import { useRef } from "react";
-import { BLACK, Square } from "chess.js";
+import { PieceStr, Square } from "../../types/chess";
 import { PiecesProps } from "../../types/board";
-import { findSquare } from "../../utils/helper";
+import { findSquare } from "../../utils/chessboard/helper";
 import Piece from "./Piece";
+import { BLACK } from "../../utils/constant";
+
+import { useRef } from "react";
 
 const Pieces = ({
   disable,
@@ -18,26 +20,42 @@ const Pieces = ({
   const onDrop = (e: React.DragEvent) => {
     // console.log("onDrop1");
     e.preventDefault();
-    if (!active) {
+
+    const fromSquare = active?.square;
+
+    if (!fromSquare || !ref.current || !e) {
       return;
     }
-    const fromSquare = active.square;
-    const toSquare = findSquare(e, ref.current, orientation) || fromSquare;
+
+    const cordinates: { top: number; left: number; width: number } =
+      ref.current.getBoundingClientRect();
+    const parentSize: { X: number; Y: number } = { X: e.clientX, Y: e.clientY };
+
+    const toSquare =
+      findSquare(parentSize, cordinates, orientation) || fromSquare;
+
     const move = {
       from: fromSquare as Square,
       to: toSquare as Square,
       piece: active.piece,
     };
+
     onMovePieces(move);
-    // console.log("onDrop2");
   };
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const fromSquare = active?.square;
-    if (!fromSquare) {
+    if (!fromSquare || !ref.current || !e) {
       return;
     }
-    const toSquare = findSquare(e, ref.current, orientation) || fromSquare;
+
+    const cordinates: { top: number; left: number; width: number } =
+      ref.current.getBoundingClientRect();
+    const parentSize: { X: number; Y: number } = { X: e.clientX, Y: e.clientY };
+
+    const toSquare =
+      findSquare(parentSize, cordinates, orientation) || fromSquare;
+
     const move = {
       from: fromSquare as Square,
       to: toSquare as Square,
@@ -64,9 +82,8 @@ const Pieces = ({
           let colI = orientation == BLACK ? board.length - ci - 1 : ci;
 
           if (board[rowI][colI]?.color && board[rowI][colI]?.type) {
-            const piece =
-              (board[rowI][colI]?.color || "") +
-              (board[rowI][colI]?.type || "");
+            const piece = ((board[rowI][colI]?.color || "") +
+              (board[rowI][colI]?.type || "")) as PieceStr;
             return (
               <Piece
                 key={ri * 8 + ci}

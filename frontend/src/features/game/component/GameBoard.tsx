@@ -16,19 +16,15 @@ const GameBoard = ({
   onMove,
   orientation, //TODO: may be we can make this global state (game)
   turn,
-  chess,
 }: GameBoardProps) => {
   const playGame = useSelector((state: RootState) => state.playGame.value);
   const dispach = useDispatch();
 
   useEffect(() => {
-    if (playGame?.activePiece && chess) {
+    if (playGame?.activePiece) {
       dispach(
         generateCandidates({
-          candidates: chess?.moves({
-            verbose: true,
-            square: playGame.activePiece.square,
-          }),
+          square: playGame.activePiece.square,
         })
       ); //TODO: change this to global state (play game state)
     }

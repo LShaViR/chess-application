@@ -110,6 +110,8 @@ const RightSection: React.FC<RightSectionProps> = ({ socket }) => {
         <div className=" grid w-full mt-10 justify-center gap-2">
           <PlayButton
             onClick={() => {
+              console.log("play button");
+
               socket.send(
                 JSON.stringify({
                   type: EXIT_GAME, //TODO: make changes for resign or abort for now only resign will be there

@@ -1,0 +1,36 @@
+version: "0.0"
+services:
+  chess-db:
+    image: postgres
+    container_name: chess-db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgrespw
+      POSTGRES_DB: chess
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  wss-chess:
+    image: "wss-chess"
+    container_name: "wss-chess-container"
+    depends_on:
+      - chess-db
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgrespw@chess-db:5432/chess"
+    ports:
+      - 8080:8080
+
+  backend-chess:
+    image: "backend-chess"
+    container_name: "backend-chess-container"
+    depends_on:
+      - chess-db
+      - wss-chess
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgrespw@chess-db:5432/chess"
+    ports:
+      - 3000:3000
+
+volumes:
+  postgres_data:

@@ -1,7 +1,9 @@
 //TODO: change name for this slice and file may be board status will we a relevent name and handle some more information in this
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Move, Piece, Square } from "chess.js";
+import { Move, Piece, Square } from "../../types/chess";
+import { MoveType } from "../../types/board";
+import { ChessInstance } from "chess.js";
 
 export interface PlayGameState {
   value: {
@@ -9,7 +11,8 @@ export interface PlayGameState {
     activePiece: { square: Square; piece: Piece } | null;
     gameEnd: "w" | "b" | "draw" | "";
     boardFEN: string; //TODO: make FEN type using zod
-    history: Move[]; //TODO: Change type
+    history: MoveType[]; //TODO: Change type
+    chess: ChessInstance; //TODO: have to change this
   } | null;
 }
 
@@ -28,7 +31,8 @@ export const playGameSlice = createSlice({
         activePiece: { square: Square; piece: Piece } | null;
         gameEnd: "w" | "b" | "draw" | "";
         boardFEN: string;
-        history: Move[];
+        history: MoveType[];
+        chess: ChessInstance;
       }>
     ) => {
       state.value = action.payload;
@@ -57,11 +61,15 @@ export const playGameSlice = createSlice({
     generateCandidates: (
       state,
       action: PayloadAction<{
-        candidates: Move[];
+        square: Square;
       }>
     ) => {
       if (state.value) {
-        state.value = { ...state.value, candidates: action.payload.candidates };
+        const candidates = state.value.chess.moves({
+          verbose: true,
+          square: action.payload.square,
+        });
+        state.value = { ...state.value, candidates: candidates };
       }
     },
     clearCandidates: (state) => {
@@ -75,7 +83,7 @@ export const playGameSlice = createSlice({
         state.value = { ...state.value, boardFEN: action.payload };
       }
     },
-    addMoveToHistory: (state, action: PayloadAction<Move>) => {
+    addMoveToHistory: (state, action: PayloadAction<MoveType>) => {
       if (state.value) {
         state.value = {
           ...state.value,
@@ -94,6 +102,19 @@ export const playGameSlice = createSlice({
         };
       }
     },
+    makeMove: (state, action: PayloadAction<{ move: MoveType }>) => {
+      if (state.value) {
+        state.value.chess.move(action.payload.move); //TODO: make move local function
+        const boardFEN = state.value.chess.fen();
+        state.value = {
+          ...state.value,
+          history: [...state.value.history, action.payload.move],
+          boardFEN: boardFEN,
+          candidates: [],
+          activePiece: null,
+        };
+      }
+    },
   },
 });
 
@@ -106,6 +127,7 @@ export const {
   clearActivePiece,
   updateBoard,
   addMoveToHistory,
+  makeMove,
 } = playGameSlice.actions;
 
 export default playGameSlice.reducer;

@@ -1,19 +1,16 @@
-import { Piece, Square } from "chess.js";
-import { filesArr, ranks } from "./constant";
-import { ShortMoveType } from "../types/board";
+import { Piece, Square } from "../../types/chess";
+import { filesArr, ranks } from "../constant";
+import { ShortMoveType } from "../../types/board";
 
 export const findSquare = (
-  e: any,
-  element: HTMLDivElement | null,
+  parentSize: { X: number; Y: number },
+  cords: { top: number; left: number; width: number },
   orientation: "w" | "b"
 ) => {
-  const cords: { top: number; left: number; width: number } | undefined =
-    element?.getBoundingClientRect();
-
   if (cords) {
     const size = cords.width / 8;
-    const x = Math.floor((e.clientX - cords.left) / size);
-    const y = Math.floor(8 - (e.clientY - cords.top) / size);
+    const x = Math.floor((parentSize.X - cords.left) / size);
+    const y = Math.floor(8 - (parentSize.Y - cords.top) / size);
 
     if (orientation == "b") {
       return filesArr[7 - x] + ranks[7 - y];
@@ -48,7 +45,7 @@ export const isPromotion = ({
 }: {
   from: Square;
   to: Square;
-  piece: Piece; //TODO: change type from chess.js to local
+  piece: Piece;
 }) => {
   if (piece.type != "p") {
     return false;

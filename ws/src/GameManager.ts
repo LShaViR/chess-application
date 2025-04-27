@@ -224,9 +224,9 @@ export class GameManager {
                     },
                   })
                 ); //TODO: check for if socket is there or not
-                if (game.chess.isGameOver()) {
+                if (game.chess.game_over()) {
                   //TODO: make different message for different types of draw and wins
-                  const result = game.chess.isCheckmate()
+                  const result = game.chess.in_checkmate()
                     ? game.chess.turn() == "b"
                       ? WHITE_WINS
                       : BLACK_WINS

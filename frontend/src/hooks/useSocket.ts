@@ -1,31 +1,59 @@
+import { WS_URL } from "../config";
 import { useEffect, useState } from "react";
-import useMessageHandler from "./useMessageHandler";
-import { useNavigate } from "react-router-dom";
 
 const useSocket = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
-  const messageHandler = useMessageHandler();
-  const navigate = useNavigate();
+
+  const token = localStorage.getItem("tokenChess");
 
   useEffect(() => {
-    const token = localStorage.getItem("tokenChess");
-    if (!token) {
-      navigate("/auth");
-    }
-    const newSocket = new WebSocket(`ws://localhost:8080/?token=${token}`);
-    newSocket.onopen = () => {
-      console.log("Connection established");
-    };
-    newSocket.onmessage = async (message) => {
-      console.log("message");
-      // console.log(message);
+    if (!token) return;
+    const ws = new WebSocket(`${WS_URL}?token=${token}`);
 
-      await messageHandler(message.data);
+    ws.onopen = () => {
+      console.log("Connection established");
+      setSocket(ws);
     };
-    setSocket(newSocket);
-    return () => newSocket.close();
-  }, []);
+
+    ws.onclose = () => {
+      setSocket(null);
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, [token]);
+
   return socket;
 };
+
+// import useMessageHandler from "./useMessageHandler";
+// import { useNavigate } from "react-router-dom";
+
+// const useSocket = () => {
+//   const [socket, setSocket] = useState<WebSocket | null>(null);
+//   const messageHandler = useMessageHandler();
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const token = localStorage.getItem("tokenChess");
+//     if (!token) {
+//       navigate("/auth");
+//     }
+//     const newSocket = new WebSocket(`ws://localhost:8080/?token=${token}`);
+//     newSocket.onopen = () => {
+//       console.log("Connection established");
+//     };
+//     newSocket.onmessage = async (message) => {
+//       console.log("message");
+//       // console.log(message);
+
+//       await messageHandler(message.data);
+//     };
+//     setSocket(newSocket);
+//     return () => newSocket.close();
+//   }, []);
+//   return socket;
+// };
 
 export default useSocket;

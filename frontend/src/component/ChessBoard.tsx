@@ -3,7 +3,7 @@
 import Pieces from "./chessboard/Pieces";
 import BoardTiles from "./chessboard/BoardTiles";
 import { Piece, PieceType, Square } from "chess.js";
-import { isPromotion } from "../utils/helper";
+import { isPromotion } from "../utils/chessboard/helper";
 import { Promotion } from "./chessboard/Promotion";
 import { filesArr } from "../utils/constant";
 import { fenToBoard } from "../utils/chess/fenToBoard";
@@ -60,9 +60,7 @@ const ChessBoard = ({
           onActive={onActive}
           onMovePieces={(move: { from: Square; to: Square; piece: Piece }) => {
             //TODO: make required changes
-            //TODO: change shortmove type
             if (isPromotion(move)) {
-              //TODO: make active as {square, piece,}
               console.log(move);
 
               setPromotion({

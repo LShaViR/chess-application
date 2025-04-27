@@ -1,4 +1,4 @@
-import { PieceType } from "chess.js"; //TODO: change this
+import { PieceType } from "../../types/chess";
 import { BLACK, filesArr, WHITE } from "../../utils/constant";
 import { PieceProps } from "../../types/board";
 
@@ -21,7 +21,7 @@ const PieceComponent = ({
       onActive({
         square,
         piece: { color: piece[0], type: piece[1] as PieceType },
-      }); //TODO: fix this
+      });
       // console.log("onDragStart5");
     }
   };
