@@ -8,7 +8,6 @@ import { Promotion } from "./chessboard/Promotion";
 import { filesArr } from "../utils/constant";
 import { fenToBoard } from "../utils/chess/fenToBoard";
 import { ChessBoardProps } from "../types/board";
-
 import { useState } from "react";
 
 const ChessBoard = ({
@@ -27,11 +26,10 @@ const ChessBoard = ({
     to?: Square | undefined;
     piece?: Piece;
   }>({ file: -1 });
-
   const board = fenToBoard(boardFEN);
 
   return (
-    <div className="lg:max-h-full lg:h-full aspect-square relative w-xl max-w-full max-h-full">
+    <div className="w-full h-full relative">
       {promotion.piece ? (
         <Promotion
           file={orientation == "w" ? promotion.file : 7 - promotion.file}

@@ -22,19 +22,19 @@ enum SELECTED {
 
 const RightSection: React.FC<RightSectionProps> = ({ socket }) => {
   const moves = useSelector(
-    (state: RootState) => state.playGame.value?.history
+    (state: RootState) => state.playGame.value?.history,
   );
   const [selected, setSelected] = useState(SELECTED.PLAY);
   if (!moves) {
     return (
-      <div className="flex flex-col h-full w-full mx-auto bg-rightsection border-y-2 border-background text-gray-200 pt-20">
+      <div className="flex flex-col h-full w-11/12 md:w-3/4 lg:w-full mx-auto bg-rightsection border-y-2 border-background text-gray-200 pt-20">
         <div className=" grid w-full justify-center gap-2">
           <PlayButton
             onClick={() => {
               socket.send(
                 JSON.stringify({
                   type: INIT_GAME,
-                })
+                }),
               );
             }}
           >
@@ -115,7 +115,7 @@ const RightSection: React.FC<RightSectionProps> = ({ socket }) => {
               socket.send(
                 JSON.stringify({
                   type: EXIT_GAME, //TODO: make changes for resign or abort for now only resign will be there
-                })
+                }),
               );
             }}
           >

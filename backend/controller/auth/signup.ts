@@ -19,7 +19,7 @@ const signup = async (req: Request, res: Response) => {
     console.log("signup1");
     const { email, name, password }: UserSchemaType = body.data;
     console.log("signup2");
-    const user = await prisma.player.findFirst({ where: { email } });
+    const user = await prisma.user.findFirst({ where: { email } });
     if (user) {
       res.send("user already exist");
       return;
@@ -27,7 +27,7 @@ const signup = async (req: Request, res: Response) => {
     console.log("signup3");
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log("signup4");
-    const response = await prisma.player.create({
+    const response = await prisma.user.create({
       data: {
         name: name,
         email: email,
@@ -38,7 +38,7 @@ const signup = async (req: Request, res: Response) => {
 
     const token = await jwt.sign(
       { id: response.id, name: response.name },
-      jwtSecret
+      jwtSecret,
     );
     res.cookie("userToken", token);
     res.send({ token: token });

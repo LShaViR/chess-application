@@ -25,7 +25,7 @@ const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         const { email, password } = body.data;
-        const user = yield db_1.default.player.findFirst({ where: { email } });
+        const user = yield db_1.default.user.findFirst({ where: { email } });
         if (!user) {
             res.status(404).send("user not exist");
             return;

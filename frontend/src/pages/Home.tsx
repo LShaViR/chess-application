@@ -1,18 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import Navbar from "../component/navbar";
+import { BottomNavbar, SideNavbar } from "../component/navbar";
 import Logo from "../component/ui/logo";
 
 const Home = () => {
   const navigate = useNavigate();
   return (
-    <div className="grid grid-cols-21 h-screen">
-      <div className="col-span-1 bg-navbar">
-        <Navbar />
+    <div className="grid grid-cols-21 grid-rows-18 lg:grid-rows-1 h-screen">
+      <div className="hidden lg:block lg:col-span-1 bg-navbar">
+        <SideNavbar />
       </div>
-      <div className="col-span-10 bg-background grid justify-center items-center">
+      <div className="hidden lg:block lg:col-span-10 bg-background grid justify-center items-center">
         <img src="/chessBoard.png" alt="" />
       </div>
-      <div className="col-span-10 bg-background flex flex-col items-center justify-center p-6">
+      <div className="col-span-21 lg:col-span-10 row-span-17 lg:row-span-1 bg-background flex flex-col items-center justify-center p-6">
         <div className="text-center mb-12">
           <h1 className="text-white text-6xl font-bold mb-8">
             Play Chess Online
@@ -57,6 +57,9 @@ const Home = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="lg:hidden row-span-1 bg-blue-400 col-span-21">
+        <BottomNavbar />
       </div>
     </div>
   );

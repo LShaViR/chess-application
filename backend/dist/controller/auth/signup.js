@@ -29,7 +29,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.log("signup1");
         const { email, name, password } = body.data;
         console.log("signup2");
-        const user = yield db_1.default.player.findFirst({ where: { email } });
+        const user = yield db_1.default.user.findFirst({ where: { email } });
         if (user) {
             res.send("user already exist");
             return;
@@ -37,7 +37,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.log("signup3");
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
         console.log("signup4");
-        const response = yield db_1.default.player.create({
+        const response = yield db_1.default.user.create({
             data: {
                 name: name,
                 email: email,

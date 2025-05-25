@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { BACKEND_URL } from "../config";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../component/navbar";
+import { BottomNavbar, SideNavbar } from "../component/navbar";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -29,7 +29,7 @@ export default function Auth() {
       if (response.data.token) {
         localStorage.setItem(
           "tokenChess",
-          (response.data.token as string | undefined) || ""
+          (response.data.token as string | undefined) || "",
         );
         navigate("/game");
       } else {
@@ -44,7 +44,7 @@ export default function Auth() {
       if (response.data.token) {
         localStorage.setItem(
           "tokenChess",
-          (response.data.token as string | undefined) || ""
+          (response.data.token as string | undefined) || "",
         );
         navigate("/game");
       } else {
@@ -54,11 +54,11 @@ export default function Auth() {
   };
 
   return (
-    <div className="grid grid-cols-21 h-screen">
-      <div className=" col-span-1">
-        <Navbar />
+    <div className="grid grid-cols-21 grid-rows-18 lg:grid-rows-1 h-screen">
+      <div className="hidden lg:block col-span-1">
+        <SideNavbar />
       </div>
-      <div className="flex items-center justify-center h-full bg-background col-span-20">
+      <div className="flex items-center justify-center h-full bg-background col-span-21 row-span-17 lg:row-span-1 lg:col-span-20">
         <div className="bg-card p-8 rounded-2xl shadow-lg w-96">
           <h2 className="text-2xl font-bold mb-4 text-center text-white">
             {isLogin ? "Login" : "Register"}
@@ -130,6 +130,9 @@ export default function Auth() {
             </button>
           </p>
         </div>
+      </div>
+      <div className="row-span-1 col-span-21 lg:hidden">
+        <BottomNavbar />
       </div>
     </div>
   );

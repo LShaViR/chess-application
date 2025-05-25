@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GameStatus {
+  IN_PROGRESS
+  COMPLETED
+  INCOMPLETE
+}
+
+enum GameResult {
+  WHITE_WINS
+  BLACK_WINS
+  DRAW
+}
+
+enum TimeControl {
+  CLASSICAL
+  RAPID
+  BLITZ
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String
+  username     String   @unique
+  password     String
+  name         String
+  rating       Int      @default(800)
+  gamesAsWhite Game[]   @relation("gamesAsWhite")
+  gamesAsBlack Game[]   @relation("gamesAsBlack")
+  createAt     DateTime @default(now())
+  lastLogin    DateTime
+}
+
+model Game {
+  id            String      @id @default(uuid())
+  status        GameStatus
+  result        GameResult
+  timeControl   TimeControl
+  startingFEN   String      @default("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+  currentFEN    String      @default("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+  startAt       DateTime
+  endAt         DateTime?
+  whitePlayerId String
+  whitePlayer   User        @relation("gamesAsWhite", fields: [whitePlayerId], references: [id])
+  blackPlayerId String
+  blackPlayer   User        @relation("gamesAsBlack", fields: [blackPlayerId], references: [id])
+  moves         Move[]
+}
+
+model Move {
+  id         String  @id @default(uuid())
+  moveNumber Int
+  from       String
+  to         String
+  promotion  String?
+  after      String
+  before     String
+  san        String
+  timeSpent  Int
+  gameId     String
+  game       Game    @relation(fields: [gameId], references: [id])
+}

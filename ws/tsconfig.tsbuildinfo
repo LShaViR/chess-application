@@ -1,1 +1,1 @@
-{"root":["./src/Game.ts","./src/GameManager.ts","./src/User.ts","./src/index.ts","./src/messages.ts","./src/types.ts","./src/auth/index.ts","./src/utils/brodcast.ts","./src/utils/constant.ts","./src/utils/initGame.ts","./src/zod/schema.ts"],"version":"5.7.3"}
+{"root":["./src/Game.ts","./src/GameManager.ts","./src/User.ts","./src/index.ts","./src/messages.ts","./src/types.ts","./src/auth/index.ts","./src/utils/brodcast.ts","./src/utils/constant.ts","./src/utils/initGame.ts","./src/zod/schema.ts"],"version":"5.8.3"}

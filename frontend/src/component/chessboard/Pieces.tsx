@@ -70,7 +70,7 @@ const Pieces = ({
 
   return (
     <div
-      className="h-full w-full aspect-square absolute left-0 top-0 grid grid-cols-8 grid-rows-8"
+      className="h-full w-full absolute left-0 top-0 grid grid-cols-8 grid-rows-8"
       onDrop={onDrop}
       onDragOver={onDragOver}
       onClick={onClick}
@@ -78,8 +78,8 @@ const Pieces = ({
     >
       {board.map((row, ri) =>
         row.map((_col, ci) => {
-          let rowI = orientation == BLACK ? board.length - ri - 1 : ri;
-          let colI = orientation == BLACK ? board.length - ci - 1 : ci;
+          const rowI = orientation == BLACK ? board.length - ri - 1 : ri;
+          const colI = orientation == BLACK ? board.length - ci - 1 : ci;
 
           if (board[rowI][colI]?.color && board[rowI][colI]?.type) {
             const piece = ((board[rowI][colI]?.color || "") +
@@ -97,7 +97,7 @@ const Pieces = ({
           } else {
             return null;
           }
-        })
+        }),
       )}
     </div>
   );

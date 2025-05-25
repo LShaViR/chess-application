@@ -15,7 +15,7 @@ const userLogin = async (req: Request, res: Response) => {
     }
     const { email, password }: UserLoginSchemaType = body.data;
 
-    const user = await prisma.player.findFirst({ where: { email } });
+    const user = await prisma.user.findFirst({ where: { email } });
 
     if (!user) {
       res.status(404).send("user not exist");

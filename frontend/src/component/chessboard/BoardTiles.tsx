@@ -13,16 +13,15 @@ const BoardTiles = ({ orientation, candidates }: BoardTilesProps) => {
       squares.push(
         <div
           key={`rank-${row}`}
-          className={`absolute font-medium text-sm z-10 ${
-            isBlack ? "text-light-tile" : "text-dark-tile"
-          }`}
+          className={`absolute font-medium text-sm z-10 ${isBlack ? "text-light-tile" : "text-dark-tile"
+            }`}
           style={{
             left: "1px",
             top: `calc(${row} * 12.5%)`,
           }}
         >
           {rankNumber}
-        </div>
+        </div>,
       );
 
       // Chess squares for this row
@@ -30,48 +29,45 @@ const BoardTiles = ({ orientation, candidates }: BoardTilesProps) => {
         const isBlack = (row + col) % 2 === 1;
 
         const fileLabel = String.fromCharCode(
-          97 + (orientation == WHITE ? col : size - col - 1)
+          97 + (orientation == WHITE ? col : size - col - 1),
         );
         const square = fileLabel + rankNumber;
 
         squares.push(
           <div
             key={`${row}-${col}`}
-            className={`relative w-full h-full row-start-${row + 1} col-start-${
-              col + 1
-            } ${isBlack ? "bg-dark-tile" : "bg-light-tile"}
+            className={`relative w-full h-full row-start-${row + 1} col-start-${col + 1
+              } ${isBlack ? "bg-dark-tile" : "bg-light-tile"}
             `}
           >
             {candidates.reduce(
               (agg, current) => agg || current.to == square,
-              false
+              false,
             ) ? (
               candidates.reduce(
                 (agg, current) =>
                   agg ||
                   (current.captured && current.to == square ? true : false),
-                false
+                false,
               ) ? (
                 <div
-                  className={` absolute w-[90%] h-[90%] ${
-                    isBlack
-                      ? "border-dark-tile-highlight"
-                      : "border-light-tile-highlight"
-                  } rounded-full border-8 border-solid left-[5%] top-[5%]`}
+                  className={` absolute w-[90%] h-[90%] ${isBlack
+                    ? "border-dark-tile-highlight"
+                    : "border-light-tile-highlight"
+                    } rounded-full border-8 border-solid left-[5%] top-[5%]`}
                 ></div>
               ) : (
                 <div
-                  className={` absolute w-[30%] h-[30%] ${
-                    isBlack
-                      ? "bg-dark-tile-highlight"
-                      : "bg-light-tile-highlight"
-                  } rounded-full left-[35%] top-[35%]`}
+                  className={` absolute w-[30%] h-[30%] ${isBlack
+                    ? "bg-dark-tile-highlight"
+                    : "bg-light-tile-highlight"
+                    } rounded-full left-[35%] top-[35%]`}
                 ></div>
               )
             ) : (
               <></>
             )}
-          </div>
+          </div>,
         );
       }
     }
@@ -79,15 +75,14 @@ const BoardTiles = ({ orientation, candidates }: BoardTilesProps) => {
     // Files (letters a-h) at the bottom
     for (let col = 0; col < size; col++) {
       const fileLabel = String.fromCharCode(
-        97 + (orientation == WHITE ? col : size - col - 1)
+        97 + (orientation == WHITE ? col : size - col - 1),
       );
       const isBlack = col % 2 == 0;
       squares.push(
         <div
           key={`file-${col}`}
-          className={`absolute font-medium text-sm text-gray ${
-            isBlack ? "text-light-tile" : "text-dark-tile"
-          }`}
+          className={`absolute font-medium text-sm text-gray ${isBlack ? "text-light-tile" : "text-dark-tile"
+            }`}
           style={{
             left: `calc(${col} * 12.5% + 12.5%)`,
             bottom: "0px",
@@ -95,7 +90,7 @@ const BoardTiles = ({ orientation, candidates }: BoardTilesProps) => {
           }}
         >
           {fileLabel}
-        </div>
+        </div>,
       );
     }
 

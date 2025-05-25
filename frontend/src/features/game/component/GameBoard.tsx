@@ -25,7 +25,7 @@ const GameBoard = ({
       dispach(
         generateCandidates({
           square: playGame.activePiece.square,
-        })
+        }),
       ); //TODO: change this to global state (play game state)
     }
   }, [playGame?.activePiece]);
