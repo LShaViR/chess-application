@@ -38,6 +38,7 @@ model User {
   username     String   @unique
   password     String
   name         String
+  avatarURL    String?
   rating       Int      @default(800)
   gamesAsWhite Game[]   @relation("gamesAsWhite")
   gamesAsBlack Game[]   @relation("gamesAsBlack")

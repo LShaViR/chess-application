@@ -9,18 +9,16 @@ interface ChessProfileTimerProps {
   rating?: number;
   initialTime?: number; // in seconds
   avatarUrl?: string;
-  isActive?: boolean;
-  color: Color;
+  color: Color | undefined;
   onTimeUp?: () => void;
 }
 
 export const ChessProfileTimer: React.FC<ChessProfileTimerProps> = ({
-  username = "LShaViR",
-  rating = 1398,
-  initialTime = 600, // 10:00 in seconds
+  username = "unknown",
+  rating = 800,
+  initialTime = 600,
   avatarUrl,
   color = Color.WHITE,
-  isActive = false,
   onTimeUp,
 }) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
@@ -51,19 +49,12 @@ export const ChessProfileTimer: React.FC<ChessProfileTimerProps> = ({
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const getRatingBars = (rating: number): number => {
-    if (rating >= 2000) return 4;
-    if (rating >= 1600) return 3;
-    if (rating >= 1200) return 2;
-    return 1;
-  };
-
   return (
     <div className=" text-white px-3 py-2 h-full flex items-center justify-between w-full max-w-2xl">
       {/* Left side - Profile */}
       <div className="flex items-center space-x-2">
         {/* Avatar */}
-        <div className="w-6 h-6 bg-gray-500 rounded-full flex items-center justify-center overflow-hidden">
+        <div className="w-6 h-6 bg-gray-500 rounded-xs flex items-center justify-center overflow-hidden">
           {avatarUrl ? (
             <img
               src={avatarUrl}

@@ -8,7 +8,6 @@ export type GameBoardProps = {
 
 export enum GameStatus {
   RUNNING = "running",
-  WHITE_WINS = "w",
-  BLACK_WINS = "b",
-  DRAW = "draw",
+  FINSHED = "finished",
+  INCOMPLETE = "incomplete",
 }

@@ -21,9 +21,7 @@ enum SELECTED {
 }
 
 const RightSection: React.FC<RightSectionProps> = ({ socket }) => {
-  const moves = useSelector(
-    (state: RootState) => state.playGame.value?.history,
-  );
+  const moves = useSelector((state: RootState) => state.game.value?.history);
   const [selected, setSelected] = useState(SELECTED.PLAY);
   if (!moves) {
     return (
@@ -49,9 +47,8 @@ const RightSection: React.FC<RightSectionProps> = ({ socket }) => {
       {/* Header Navigation */}
       <div className="flex justify-center gap-1 py-1 border-b border-background">
         <button
-          className={`flex flex-col items-center justify-center px-3 py-2 w-15 hover:bg-dark-button ${
-            selected == SELECTED.PLAY ? "bg-background" : ""
-          }`}
+          className={`flex flex-col items-center justify-center px-3 py-2 w-15 hover:bg-dark-button ${selected == SELECTED.PLAY ? "bg-background" : ""
+            }`}
           onClick={() => {
             setSelected(SELECTED.PLAY);
           }}
@@ -68,9 +65,8 @@ const RightSection: React.FC<RightSectionProps> = ({ socket }) => {
           <span className="text-[0.7rem] w-full ">Play</span>
         </button>
         <button
-          className={`flex flex-col items-center justify-center px-3 py-2 w-15 hover:bg-dark-button  ${
-            selected == SELECTED.NEWGAME ? "bg-background" : ""
-          }`}
+          className={`flex flex-col items-center justify-center px-3 py-2 w-15 hover:bg-dark-button  ${selected == SELECTED.NEWGAME ? "bg-background" : ""
+            }`}
           onClick={() => {
             setSelected(SELECTED.NEWGAME);
           }}

@@ -9,13 +9,16 @@ import {
   OPPONENT_RECONNECTED,
 } from "../../../utils/messages";
 import { Dispatch, UnknownAction } from "@reduxjs/toolkit";
-import { newGame, updateGame } from "../../../store/features/gameSlice";
-import { makeMove, newPlayGame } from "../../../store/features/playGameSlice";
+import {
+  makeMove,
+  newGame,
+  updateGame,
+} from "../../../store/features/gameSlice";
 import { GameStatus } from "../../../types/game";
 
 export const messageHandler = (
   dispatch: Dispatch<UnknownAction>,
-  data: string
+  data: string,
 ) => {
   try {
     const message = JSON.parse(data);
@@ -23,7 +26,7 @@ export const messageHandler = (
     console.log(message);
 
     switch (message.type) {
-      case INIT_GAME:
+      case INIT_GAME: {
         dispatch(
           newGame({
             player1: payload.player1.name,
@@ -31,21 +34,16 @@ export const messageHandler = (
             turn: payload.turn,
             gameStatus: GameStatus.RUNNING,
             gameId: payload.gameId,
-          })
-        );
-        dispatch(
-          newPlayGame({
             candidates: [],
             activePiece: null,
-            gameEnd: "",
             boardFEN: new Chess().fen(),
             history: [],
             chess: new Chess(),
-          })
+          }),
         );
-
         break;
-      case JOIN_AGAIN:
+      }
+      case JOIN_AGAIN: {
         console.log("joingame");
 
         const chess = new Chess();
@@ -59,19 +57,15 @@ export const messageHandler = (
             turn: payload.turn,
             gameStatus: GameStatus.RUNNING,
             gameId: payload.gameId,
-          })
-        );
-        dispatch(
-          newPlayGame({
             candidates: [],
             activePiece: null,
-            gameEnd: "",
             boardFEN: chess.fen(),
             history: movesHistory,
             chess: chess,
-          })
+          }),
         );
         break;
+      }
       case OPPONENT_DISCONNECTED: //TODO: to be implemented
         break;
       case OPPONENT_RECONNECTED: //TODO: to be implemented

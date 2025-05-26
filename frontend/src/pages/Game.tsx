@@ -6,7 +6,6 @@ import { BottomNavbar, SideNavbar } from "../component/navbar";
 import { MOVE } from "../utils/messages";
 import useSocket from "../hooks/useSocket"; //TODO: change code for this
 import RightSection from "../features/game/component/RightSection";
-import GameBoard from "../features/game/component/GameBoard";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { Color, ShortMoveType } from "../types/board";
@@ -45,7 +44,7 @@ const Game = () => {
                   }),
                 );
               }}
-              turn={game?.turn}
+              turn={game?.turn || Color.WHITE}
             />
           </div>
           <div className="col-span-3 h-screen max-w-screen w-full ">

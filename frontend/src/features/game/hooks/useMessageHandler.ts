@@ -4,7 +4,7 @@ import { messageHandler } from "../utils/messageHandler";
 const useMessageHandler = (socket: WebSocket) => {
   const dispatch = useDispatch();
   socket.onmessage = async (message) => {
-    await messageHandler(dispatch, message.data);
+    messageHandler(dispatch, message.data);
   };
 
   return messageHandler;

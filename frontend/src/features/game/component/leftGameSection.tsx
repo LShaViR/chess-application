@@ -46,7 +46,9 @@ export function GameLeftSection({
             }}
             className={`bg-navbar`}
           >
-            <ChessProfileTimer />
+            <ChessProfileTimer
+              color={turn == Color.WHITE ? Color.BLACK : Color.WHITE}
+            />
           </div>
           <div
             style={{
@@ -67,7 +69,7 @@ export function GameLeftSection({
             }}
             className={`bg-navbar`}
           >
-            <ChessProfileTimer />
+            <ChessProfileTimer color={turn} />
           </div>
         </div>
       </div>

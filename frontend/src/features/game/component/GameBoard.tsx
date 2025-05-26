@@ -7,7 +7,7 @@ import ChessBoard from "../../../component/ChessBoard";
 import {
   generateCandidates,
   setActivePiece,
-} from "../../../store/features/playGameSlice";
+} from "../../../store/features/gameSlice";
 import { ActivePiece, Color } from "../../../types/board";
 import { defaultBoardFEN } from "../../../utils/constant";
 import { GameBoardProps } from "../../../types/game";
@@ -17,7 +17,7 @@ const GameBoard = ({
   orientation, //TODO: may be we can make this global state (game)
   turn,
 }: GameBoardProps) => {
-  const playGame = useSelector((state: RootState) => state.playGame.value);
+  const playGame = useSelector((state: RootState) => state.game.value); //TODO: update this with custom selector
   const dispach = useDispatch();
 
   useEffect(() => {
