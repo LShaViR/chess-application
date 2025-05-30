@@ -17,6 +17,7 @@ export type ChessBoardProps = {
   boardFEN: string; //TODO: check if it is valid fen or not
   disable: boolean;
   candidates: Move[]; //TODO: change move type
+  squareSize: number;
 };
 
 export type PromotionProps = {

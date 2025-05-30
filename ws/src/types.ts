@@ -1,13 +1,33 @@
-import { Move } from "chess.js";
+import { z } from "zod";
 
-export enum GameStatus {
+export const gameStatusSchema = z.enum([
   "running",
-  "white",
-  "black",
+  "white_wins",
+  "black_wins",
   "draw",
   "unfinished",
-}
+]);
 
-export interface MoveType extends Move {
-  timeSpent: number;
-}
+export const shortMoveSchema = z.object({
+  from: z.string().regex(/^[a-h][1-8]$/),
+  to: z.string().regex(/^[a-h][1-8]$/),
+  promotion: z.enum(["q", "r", "b", "n"]),
+});
+
+export const moveSchema = z.object({
+  from: z.string().regex(/^[a-h][1-8]$/),
+  to: z.string().regex(/^[a-h][1-8]$/),
+  promotion: z.enum(["q", "r", "b", "n"]),
+  san: z.string(),
+  timeSpent: z.number(),
+});
+
+export const playerGameSchema = z.object({
+  username: z.string(),
+  rating: z.string(),
+  avatarUrl: z.string(),
+});
+
+export type ShortMoveType = z.infer<typeof shortMoveSchema>;
+export type MoveType = z.infer<typeof moveSchema>;
+export type GameStatusType = z.infer<typeof gameStatusSchema>;

@@ -6,12 +6,11 @@ const JWT_SECRET = process.env.JWT_SECRET || "secretKey";
 
 export interface userJwtClaims {
   id: string;
-  name: string;
 }
 //TODO: update this function
 export const extractAuthUser = (
   token: string,
-  socket: WebSocket
+  socket: WebSocket,
 ): User | undefined => {
   console.log(JWT_SECRET);
   try {

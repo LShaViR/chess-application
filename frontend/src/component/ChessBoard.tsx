@@ -19,6 +19,7 @@ const ChessBoard = ({
   boardFEN,
   disable,
   candidates,
+  squareSize,
 }: ChessBoardProps) => {
   const [promotion, setPromotion] = useState<{
     file: number;
@@ -29,7 +30,13 @@ const ChessBoard = ({
   const board = fenToBoard(boardFEN);
 
   return (
-    <div className="w-full h-full relative">
+    <div
+      style={{
+        width: `${squareSize}px`,
+        height: `${squareSize}px`,
+        position: "relative",
+      }}
+    >
       {promotion.piece ? (
         <Promotion
           file={orientation == "w" ? promotion.file : 7 - promotion.file}

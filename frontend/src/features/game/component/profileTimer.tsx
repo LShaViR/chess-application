@@ -1,48 +1,24 @@
 //TODO: change color / make color for this
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { User, Clock } from "lucide-react";
 import { Color } from "../../../types/board";
-
+import { useTimer } from "../hooks/useTimer";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
 interface ChessProfileTimerProps {
-  username?: string;
-  rating?: number;
-  initialTime?: number; // in seconds
-  avatarUrl?: string;
-  color: Color | undefined;
-  onTimeUp?: () => void;
+  color: Color;
 }
 
 export const ChessProfileTimer: React.FC<ChessProfileTimerProps> = ({
-  username = "unknown",
-  rating = 800,
-  initialTime = 600,
-  avatarUrl,
-  color = Color.WHITE,
-  onTimeUp,
+  color,
 }) => {
-  const [timeLeft, setTimeLeft] = useState(initialTime);
-  const [isRunning, setIsRunning] = useState(false);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-
-    if (isRunning && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            setIsRunning(false);
-            onTimeUp?.();
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-
-    return () => clearInterval(interval);
-  }, [isRunning, timeLeft, onTimeUp]);
-
+  const { timer } = useTimer(color);
+  const { username, avatarUrl, rating } = useSelector((state: RootState) =>
+    color == Color.WHITE
+      ? state.game.value?.player1
+      : state.game.value?.player2,
+  ) || { username: "unknown", avatarUrl: "", rating: 800 };
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -85,7 +61,7 @@ export const ChessProfileTimer: React.FC<ChessProfileTimerProps> = ({
             className={color == Color.WHITE ? "text-gray-700" : "text-gray-100"}
           />
           <span className="font-mono text-sm font-semibold">
-            {formatTime(timeLeft)}
+            {formatTime(timer)}
           </span>
         </div>
       </div>

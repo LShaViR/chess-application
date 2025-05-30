@@ -4,6 +4,7 @@ export type GameBoardProps = {
   onMove: (move: ShortMoveType) => void;
   orientation: Orientation;
   turn: Turn;
+  squareSize: number;
 };
 
 export enum GameStatus {
@@ -11,3 +12,9 @@ export enum GameStatus {
   FINSHED = "finished",
   INCOMPLETE = "incomplete",
 }
+
+export type Player = {
+  username: string;
+  avatarUrl: string;
+  rating: number;
+};

@@ -50,18 +50,13 @@ export function GameLeftSection({
               color={turn == Color.WHITE ? Color.BLACK : Color.WHITE}
             />
           </div>
-          <div
-            style={{
-              width: `${squareSize}px`,
-              height: `${squareSize}px`,
-            }}
-          >
-            <GameBoard
-              onMove={onMove}
-              orientation={turn || Color.WHITE} //TODO: make other state for orientation
-              turn={turn || Color.WHITE}
-            />
-          </div>
+
+          <GameBoard
+            onMove={onMove}
+            orientation={turn || Color.WHITE} //TODO: make other state for orientation
+            turn={turn || Color.WHITE}
+            squareSize={squareSize}
+          />
           <div
             style={{
               width: `${squareSize}px`,

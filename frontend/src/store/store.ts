@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import gameReducer from "./features/gameSlice";
-import playGameReducer from "./features/playGameSlice";
 
 export const store = configureStore({
   reducer: {
     game: gameReducer,
-    playGame: playGameReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -16,6 +16,7 @@ const GameBoard = ({
   onMove,
   orientation, //TODO: may be we can make this global state (game)
   turn,
+  squareSize,
 }: GameBoardProps) => {
   const playGame = useSelector((state: RootState) => state.game.value); //TODO: update this with custom selector
   const dispach = useDispatch();
@@ -43,6 +44,7 @@ const GameBoard = ({
       boardFEN={playGame?.boardFEN || defaultBoardFEN}
       disable={false}
       candidates={playGame?.candidates || []}
+      squareSize={squareSize}
     />
   );
 };

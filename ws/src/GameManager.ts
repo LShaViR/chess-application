@@ -10,7 +10,6 @@ import {
   OPPONENT_RECONNECTED,
 } from "./messages";
 import { User } from "./User";
-import { WebSocket } from "ws";
 import { messageSchema } from "./zod/schema";
 import { brodcastMessage } from "./utils/brodcast";
 import { BLACK_WINS, DRAW, WHITE_WINS } from "./utils/constant";
@@ -105,7 +104,7 @@ export class GameManager {
                         turn: user.id == player1.id ? "w" : "b",
                         pgn: game.chess.pgn(),
                       },
-                    })
+                    }),
                   );
                   waitingPlayer.socket.send(
                     JSON.stringify({
@@ -118,7 +117,7 @@ export class GameManager {
                         player2: { id: player2.id, name: player2.name },
                         turn: user.id == player1.id ? "w" : "b",
                       },
-                    })
+                    }),
                   );
                   return;
                 }
@@ -163,7 +162,7 @@ export class GameManager {
                       },
                       turn: this.pendingUserId == game.player1 ? "w" : "b",
                     },
-                  })
+                  }),
                 );
                 user.socket.send(
                   JSON.stringify({
@@ -179,7 +178,7 @@ export class GameManager {
                       },
                       turn: userId == game.player1 ? "w" : "b",
                     },
-                  })
+                  }),
                 );
                 this.pendingUserId = "";
               } else {
@@ -190,7 +189,7 @@ export class GameManager {
                     payload: {
                       message: "pending use set",
                     },
-                  })
+                  }),
                 );
               }
               break;
@@ -222,7 +221,7 @@ export class GameManager {
                       move,
                       turn: game.chess.turn() == "w" ? "b" : "w",
                     },
-                  })
+                  }),
                 ); //TODO: check for if socket is there or not
                 if (game.chess.game_over()) {
                   //TODO: make different message for different types of draw and wins
@@ -241,7 +240,7 @@ export class GameManager {
                       payload: {
                         result: result,
                       },
-                    })
+                    }),
                   );
                 }
               }
@@ -271,7 +270,7 @@ export class GameManager {
               otherUser.user.socket.send(
                 JSON.stringify({
                   type: OPPONENT_DISCONNECTED,
-                })
+                }),
               );
             }
           }

@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { MoveType, Turn } from "../../types/board";
-import { GameStatus } from "../../types/game";
+import { Color, MoveType, Turn } from "../../types/board";
+import { GameStatus, Player } from "../../types/game";
 import { ChessInstance, Move } from "chess.js";
 import { Square, Piece } from "react-chessboard/dist/chessboard/types";
 
 export interface GameState {
   value: {
-    player1: string;
-    player2: string;
+    player1: Player;
+    player2: Player;
+    player1TimeLeft: number;
+    player2TimeLeft: number;
     turn: Turn;
     gameStatus: GameStatus;
     gameId: string;
@@ -17,6 +19,7 @@ export interface GameState {
     boardFEN: string; //TODO: make FEN type using zod
     history: MoveType[]; //TODO: Change type
     chess: ChessInstance; //TODO: have to change this
+    gameTurn: Turn;
   } | null;
 }
 
@@ -31,8 +34,8 @@ export const gameSlice = createSlice({
     newGame: (
       state,
       action: PayloadAction<{
-        player1: string;
-        player2: string;
+        player1: Player;
+        player2: Player;
         turn: Turn;
         gameStatus: GameStatus;
         gameId: string;
@@ -41,6 +44,9 @@ export const gameSlice = createSlice({
         boardFEN: string;
         history: MoveType[];
         chess: ChessInstance;
+        player1TimeLeft: number;
+        player2TimeLeft: number;
+        gameTurn: Turn;
       }>,
     ) => {
       console.log("Inside Init Game");
@@ -132,6 +138,18 @@ export const gameSlice = createSlice({
           boardFEN: boardFEN,
           candidates: [],
           activePiece: null,
+          player1TimeLeft:
+            state.value.player1TimeLeft -
+            (action.payload.move.color == "w"
+              ? action.payload.move.timeSpent
+              : 0),
+          player2TimeLeft:
+            state.value.player2TimeLeft -
+            (action.payload.move.color == "b"
+              ? action.payload.move.timeSpent
+              : 0),
+          gameTurn:
+            state.value.gameTurn == Color.WHITE ? Color.BLACK : Color.WHITE,
         };
       }
     },
