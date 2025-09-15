@@ -39,6 +39,9 @@ export const messageHandler = (
             boardFEN: new Chess().fen(),
             history: [],
             chess: new Chess(),
+            player1TimeLeft: payload.player1.timeLeft || 600000,
+            player2TimeLeft: payload.player2.timeLeft || 600000,
+            gameTurn: payload.turn,
           }),
         );
         break;
@@ -62,6 +65,9 @@ export const messageHandler = (
             boardFEN: chess.fen(),
             history: movesHistory,
             chess: chess,
+            player1TimeLeft: payload.player1.timeLeft || 600000,
+            player2TimeLeft: payload.player2.timeLeft || 600000,
+            gameTurn: payload.turn,
           }),
         );
         break;

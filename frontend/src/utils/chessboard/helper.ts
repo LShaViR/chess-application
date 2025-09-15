@@ -39,7 +39,7 @@ export const isValidMove = (
 };
 
 export const isPromotion = ({
-  from,
+  // from,
   to,
   piece,
 }: {

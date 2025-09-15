@@ -19,26 +19,26 @@ const GameBoard = ({
   squareSize,
 }: GameBoardProps) => {
   const playGame = useSelector((state: RootState) => state.game.value); //TODO: update this with custom selector
-  const dispach = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (playGame?.activePiece) {
-      dispach(
+      dispatch(
         generateCandidates({
           square: playGame.activePiece.square,
         }),
       ); //TODO: change this to global state (play game state)
     }
-  }, [playGame?.activePiece]);
+  }, [playGame?.activePiece, dispatch]);
 
   return (
     <ChessBoard
       onMove={onMove}
       onActive={(active: ActivePiece) => {
         //TODO: make type for this
-        dispach(setActivePiece({ activePiece: active })); //TODO: write this in different place
+        dispatch(setActivePiece({ activePiece: active as any })); //TODO: write this in different place
       }}
-      active={playGame?.activePiece || null}
+      active={playGame?.activePiece as any || null}
       orientation={orientation == "w" ? Color.WHITE : Color.BLACK}
       turn={turn == "w" ? Color.WHITE : Color.BLACK}
       boardFEN={playGame?.boardFEN || defaultBoardFEN}
