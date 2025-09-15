@@ -11,14 +11,15 @@ import { RootState } from "../store/store";
 import { Color, ShortMoveType } from "../types/board";
 import useMessageHandler from "../features/game/hooks/useMessageHandler";
 import { GameLeftSection } from "../features/game/component/leftGameSection";
+import GameEnd from "../features/game/component/GameEnd";
 
 const Game = () => {
   const game = useSelector((state: RootState) => state.game.value);
   const socket = useSocket(); //TODO: make major changes for this
-  if (socket) {
-    //TODO: find better thing for that
-    useMessageHandler(socket);
-  } else {
+  
+  useMessageHandler(socket);
+
+  if (!socket) {
     return <></>;
   }
 
@@ -55,6 +56,7 @@ const Game = () => {
       <div className="row-span-1  col-span-21 md:hidden w-full">
         <BottomNavbar />
       </div>
+      <GameEnd socket={socket} />
     </div>
   );
 };

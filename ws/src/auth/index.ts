@@ -6,6 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "secretKey";
 
 export interface userJwtClaims {
   id: string;
+  username?: string;
 }
 //TODO: update this function
 export const extractAuthUser = (
