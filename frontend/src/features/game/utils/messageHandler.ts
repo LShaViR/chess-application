@@ -12,7 +12,7 @@ import { Dispatch, UnknownAction } from "@reduxjs/toolkit";
 import {
   makeMove,
   newGame,
-  updateGame,
+  gameOver,
 } from "../../../store/features/gameSlice";
 import { GameStatus } from "../../../types/game";
 
@@ -74,7 +74,7 @@ export const messageHandler = (
         dispatch(makeMove({ move: payload.move }));
         break;
       case GAME_OVER:
-        dispatch(updateGame({ gameStatus: payload.result }));
+        dispatch(gameOver({ gameEnd: payload.result, gameEndReason: payload.reason }));
         break;
       default:
         break;

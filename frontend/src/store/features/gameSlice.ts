@@ -20,6 +20,8 @@ export interface GameState {
     history: MoveType[]; //TODO: Change type
     chess: ChessInstance; //TODO: have to change this
     gameTurn: Turn;
+    gameEnd?: "draw" | "white_wins" | "black_wins";
+    gameEndReason?: string;
   } | null;
 }
 
@@ -119,12 +121,14 @@ export const gameSlice = createSlice({
     },
     gameOver: (
       state,
-      action: PayloadAction<{ gameEnd: "draw" | "w" | "b" }>,
+      action: PayloadAction<{ gameEnd: "draw" | "white_wins" | "black_wins"; gameEndReason?: string }>,
     ) => {
       if (state.value) {
         state.value = {
           ...state.value,
+          gameStatus: GameStatus.FINSHED,
           gameEnd: action.payload.gameEnd,
+          gameEndReason: action.payload.gameEndReason,
         };
       }
     },
@@ -167,6 +171,7 @@ export const {
   updateBoard,
   addMoveToHistory,
   makeMove,
+  gameOver,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

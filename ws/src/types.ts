@@ -28,6 +28,14 @@ export const playerGameSchema = z.object({
   avatarUrl: z.string(),
 });
 
+export enum GameStatus {
+  running = "running",
+  white = "white_wins",
+  black = "black_wins", 
+  draw = "draw",
+  unfinished = "unfinished",
+}
+
 export type ShortMoveType = z.infer<typeof shortMoveSchema>;
 export type MoveType = z.infer<typeof moveSchema>;
 export type GameStatusType = z.infer<typeof gameStatusSchema>;
