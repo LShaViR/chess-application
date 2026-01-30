@@ -12,7 +12,7 @@ import { Dispatch, UnknownAction } from "@reduxjs/toolkit";
 import {
   makeMove,
   newGame,
-  updateGame,
+  gameOver,
 } from "../../../store/features/gameSlice";
 import { GameStatus } from "../../../types/game";
 
@@ -39,6 +39,9 @@ export const messageHandler = (
             boardFEN: new Chess().fen(),
             history: [],
             chess: new Chess(),
+            player1TimeLeft: payload.player1.timeLeft || 600000,
+            player2TimeLeft: payload.player2.timeLeft || 600000,
+            gameTurn: payload.turn,
           }),
         );
         break;
@@ -62,6 +65,9 @@ export const messageHandler = (
             boardFEN: chess.fen(),
             history: movesHistory,
             chess: chess,
+            player1TimeLeft: payload.player1.timeLeft || 600000,
+            player2TimeLeft: payload.player2.timeLeft || 600000,
+            gameTurn: payload.turn,
           }),
         );
         break;
@@ -74,7 +80,7 @@ export const messageHandler = (
         dispatch(makeMove({ move: payload.move }));
         break;
       case GAME_OVER:
-        dispatch(updateGame({ gameStatus: payload.result }));
+        dispatch(gameOver({ gameEnd: payload.result, gameEndReason: payload.reason }));
         break;
       default:
         break;

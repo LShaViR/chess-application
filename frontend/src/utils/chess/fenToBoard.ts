@@ -16,7 +16,7 @@ export function fenToBoard(fen: string): BoardType {
       if (!isNaN(Number(char))) {
         const emptySquares = Number(char);
         for (let i = 0; i < emptySquares; i++) {
-          const square = (files[fileIndex] + (8 - rowIndex)) as Square;
+          // const square = (files[fileIndex] + (8 - rowIndex)) as Square;
           row.push(null);
           fileIndex++;
         }

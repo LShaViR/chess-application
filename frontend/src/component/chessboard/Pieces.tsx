@@ -91,7 +91,7 @@ const Pieces = ({
                 turn={turn}
                 piece={piece}
                 square={board[rowI][colI]!.square}
-                onActive={!disable ? onActive : (_square) => {}}
+                onActive={!disable ? onActive : () => {}}
               />
             );
           } else {

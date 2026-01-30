@@ -38,6 +38,7 @@ export const gameJoinAgainPayloadSchema = z.object({
 
 export const gameOverPayloadSchema = z.object({
   result: z.enum(["black_wins", "white_wins", "draw"]),
+  reason: z.string().optional(),
 });
 
 export type GameAddedPayloadType = z.infer<typeof gameAddedPayloadSchema>;

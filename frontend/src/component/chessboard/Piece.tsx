@@ -27,7 +27,7 @@ const PieceComponent = ({
   };
 
   const onClick: React.MouseEventHandler<HTMLDivElement> = (
-    _e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    // _e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     actPiece();
   };
