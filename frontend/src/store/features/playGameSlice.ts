@@ -1,4 +1,5 @@
 //TODO: change name for this slice and file may be board status will we a relevent name and handle some more information in this
+
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Move, Piece, Square } from "../../types/chess";
@@ -33,7 +34,7 @@ export const playGameSlice = createSlice({
         boardFEN: string;
         history: MoveType[];
         chess: ChessInstance;
-      }>
+      }>,
     ) => {
       state.value = action.payload;
     },
@@ -41,7 +42,7 @@ export const playGameSlice = createSlice({
       state,
       action: PayloadAction<{
         activePiece: { square: Square; piece: Piece } | null;
-      }>
+      }>,
     ) => {
       if (state.value) {
         state.value = {
@@ -62,7 +63,7 @@ export const playGameSlice = createSlice({
       state,
       action: PayloadAction<{
         square: Square;
-      }>
+      }>,
     ) => {
       if (state.value) {
         const candidates = state.value.chess.moves({
@@ -93,7 +94,7 @@ export const playGameSlice = createSlice({
     },
     gameOver: (
       state,
-      action: PayloadAction<{ gameEnd: "draw" | "w" | "b" }>
+      action: PayloadAction<{ gameEnd: "draw" | "w" | "b" }>,
     ) => {
       if (state.value) {
         state.value = {

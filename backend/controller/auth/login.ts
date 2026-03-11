@@ -4,7 +4,8 @@ import { userLoginSchema } from "../../zod/schema";
 import prisma from "../../db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { jwtSecret } from "../../config";
+
+const jwtSecret = "secretkey";
 
 const userLogin = async (req: Request, res: Response) => {
   try {
@@ -13,9 +14,9 @@ const userLogin = async (req: Request, res: Response) => {
       res.send("wrong input");
       return;
     }
-    const { email, password }: UserLoginSchemaType = body.data;
+    const { username, password }: UserLoginSchemaType = body.data;
 
-    const user = await prisma.user.findFirst({ where: { email } });
+    const user = await prisma.user.findFirst({ where: { username } });
 
     if (!user) {
       res.status(404).send("user not exist");
@@ -28,7 +29,9 @@ const userLogin = async (req: Request, res: Response) => {
       res.send("wrong password");
       return;
     }
-    const token = jwt.sign({ id: user.id, name: user.name }, jwtSecret);
+    const token = jwt.sign({ id: user.id, name: user.name }, jwtSecret, {
+      algorithm: "HS256",
+    });
 
     res.cookie("userToken", token);
     res.send({ token: token });

@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { User } from "../User";
 import { WebSocket } from "ws";
 
-const JWT_SECRET = process.env.JWT_SECRET || "secretKey";
+const JWT_SECRET = "secretkey";
 
 export interface userJwtClaims {
   id: string;
@@ -11,7 +11,7 @@ export interface userJwtClaims {
 //TODO: update this function
 export const extractAuthUser = (
   token: string,
-  socket: WebSocket
+  socket: WebSocket,
 ): User | undefined => {
   console.log(JWT_SECRET);
   try {

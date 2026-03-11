@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -34,7 +33,6 @@ enum TimeControl {
 
 model User {
   id           String   @id @default(uuid())
-  email        String
   username     String   @unique
   password     String
   name         String
@@ -42,7 +40,6 @@ model User {
   gamesAsWhite Game[]   @relation("gamesAsWhite")
   gamesAsBlack Game[]   @relation("gamesAsBlack")
   createAt     DateTime @default(now())
-  lastLogin    DateTime
 }
 
 model Game {

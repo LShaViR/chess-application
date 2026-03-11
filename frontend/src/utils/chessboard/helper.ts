@@ -5,7 +5,7 @@ import { ShortMoveType } from "../../types/board";
 export const findSquare = (
   parentSize: { X: number; Y: number },
   cords: { top: number; left: number; width: number },
-  orientation: "w" | "b"
+  orientation: "w" | "b",
 ) => {
   if (cords) {
     const size = cords.width / 8;
@@ -24,7 +24,7 @@ export const findSquare = (
 
 export const isValidMove = (
   move: ShortMoveType,
-  candidates?: ShortMoveType[]
+  candidates?: ShortMoveType[],
 ) => {
   // console.log("isValidMove1");
   let ans = false;
@@ -37,8 +37,8 @@ export const isValidMove = (
   });
   return ans;
 };
-
 export const isPromotion = ({
+  // @ts-ignore
   from,
   to,
   piece,

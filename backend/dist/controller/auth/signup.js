@@ -16,7 +16,7 @@ const schema_1 = require("../../zod/schema");
 const db_1 = __importDefault(require("../../db"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = require("../../config");
+const jwtSecret = "secretkey";
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = schema_1.userSchema.safeParse(req.body);
@@ -27,9 +27,9 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         console.log("signup1");
-        const { email, name, password } = body.data;
+        const { username, name, password } = body.data;
         console.log("signup2");
-        const user = yield db_1.default.user.findFirst({ where: { email } });
+        const user = yield db_1.default.user.findFirst({ where: { username } });
         if (user) {
             res.send("user already exist");
             return;
@@ -40,16 +40,17 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield db_1.default.user.create({
             data: {
                 name: name,
-                email: email,
+                username: username,
                 password: hashedPassword,
             },
         });
-        console.log("signup5");
-        const token = yield jsonwebtoken_1.default.sign({ id: response.id, name: response.name }, config_1.jwtSecret);
+        console.log("signup5", jwtSecret);
+        const token = jsonwebtoken_1.default.sign({ id: response.id, name: response.name }, jwtSecret, { algorithm: "HS256" });
         res.cookie("userToken", token);
         res.send({ token: token });
     }
     catch (error) {
+        console.error(error);
         res.send("something went wrong");
     }
 });

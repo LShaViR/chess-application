@@ -10,8 +10,9 @@ const NavItem: React.FC<{
 }> = ({ icon, active = false, onClick, bgColor }) => {
   return (
     <div
-      className={` w-14 h-14 mx-auto my-2 flex items-center justify-center rounded cursor-pointer transition-all duration-200 ${active ? "bg-dark-button-hover" : "hover:bg-dark-button-hover"
-        } ${bgColor || ""}`}
+      className={` w-14 h-14 mx-auto my-2 flex items-center justify-center rounded cursor-pointer transition-all duration-200 ${
+        active ? "bg-dark-button-hover" : "hover:bg-dark-button-hover"
+      } ${bgColor || ""}`}
       onClick={onClick}
     >
       {icon}
@@ -27,8 +28,9 @@ const BottomNavItem: React.FC<{
 }> = ({ icon, active = false, onClick, bgColor }) => {
   return (
     <div
-      className={` w-14 h-14 flex items-center justify-center rounded cursor-pointer transition-all duration-200 ${active ? "bg-dark-button-hover" : "hover:bg-dark-button-hover"
-        } ${bgColor || ""}`}
+      className={` w-14 h-14 flex items-center justify-center rounded cursor-pointer transition-all duration-200 ${
+        active ? "bg-dark-button-hover" : "hover:bg-dark-button-hover"
+      } ${bgColor || ""}`}
       onClick={onClick}
     >
       {icon}
@@ -86,9 +88,9 @@ export const SideNavbar: React.FC = () => {
             const token = localStorage.getItem("tokenChess");
             if (token) {
               localStorage.setItem("tokenChess", "");
-              navigate("/auth");
+              window.location.href = "/auth";
             } else {
-              navigate("/auth");
+              window.location.href = "/auth";
             }
           }}
         />
@@ -143,9 +145,9 @@ export function BottomNavbar() {
           const token = localStorage.getItem("tokenChess");
           if (token) {
             localStorage.setItem("tokenChess", "");
-            navigate("/auth");
+            window.location.href = "/auth";
           } else {
-            navigate("/auth");
+            window.location.href = "/auth";
           }
         }}
       />

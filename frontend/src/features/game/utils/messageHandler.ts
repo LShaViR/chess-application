@@ -15,12 +15,11 @@ import { GameStatus } from "../../../types/game";
 
 export const messageHandler = (
   dispatch: Dispatch<UnknownAction>,
-  data: string
+  data: string,
 ) => {
   try {
     const message = JSON.parse(data);
     const payload = message.payload;
-    console.log(message);
 
     switch (message.type) {
       case INIT_GAME:
@@ -31,7 +30,7 @@ export const messageHandler = (
             turn: payload.turn,
             gameStatus: GameStatus.RUNNING,
             gameId: payload.gameId,
-          })
+          }),
         );
         dispatch(
           newPlayGame({
@@ -41,16 +40,16 @@ export const messageHandler = (
             boardFEN: new Chess().fen(),
             history: [],
             chess: new Chess(),
-          })
+          }),
         );
 
         break;
       case JOIN_AGAIN:
-        console.log("joingame");
+        //console.log("joingame");
 
         const chess = new Chess();
         chess.load_pgn(payload.pgn);
-        const movesHistory = payload.movesHistory;
+        const moveHistory = payload.moveHistory;
 
         dispatch(
           newGame({
@@ -59,7 +58,7 @@ export const messageHandler = (
             turn: payload.turn,
             gameStatus: GameStatus.RUNNING,
             gameId: payload.gameId,
-          })
+          }),
         );
         dispatch(
           newPlayGame({
@@ -67,9 +66,9 @@ export const messageHandler = (
             activePiece: null,
             gameEnd: "",
             boardFEN: chess.fen(),
-            history: movesHistory,
+            history: moveHistory,
             chess: chess,
-          })
+          }),
         );
         break;
       case OPPONENT_DISCONNECTED: //TODO: to be implemented

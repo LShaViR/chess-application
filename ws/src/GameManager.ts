@@ -45,8 +45,6 @@ export class GameManager {
   }
 
   removeUser(userId: string) {
-    console.log(userId);
-
     const gameId = this.users.get(userId)?.gameId;
     if (gameId && this.games.get(gameId)) {
       this.users.set(userId, {
@@ -102,10 +100,12 @@ export class GameManager {
                           name: player1.name,
                         },
                         player2: { id: player2.id, name: player2.name },
+
                         turn: user.id == player1.id ? "w" : "b",
                         pgn: game.chess.pgn(),
+                        moveHistory: game.chess.history({ verbose: true }),
                       },
-                    })
+                    }),
                   );
                   waitingPlayer.socket.send(
                     JSON.stringify({
@@ -118,7 +118,7 @@ export class GameManager {
                         player2: { id: player2.id, name: player2.name },
                         turn: user.id == player1.id ? "w" : "b",
                       },
-                    })
+                    }),
                   );
                   return;
                 }
@@ -163,7 +163,7 @@ export class GameManager {
                       },
                       turn: this.pendingUserId == game.player1 ? "w" : "b",
                     },
-                  })
+                  }),
                 );
                 user.socket.send(
                   JSON.stringify({
@@ -179,7 +179,7 @@ export class GameManager {
                       },
                       turn: userId == game.player1 ? "w" : "b",
                     },
-                  })
+                  }),
                 );
                 this.pendingUserId = "";
               } else {
@@ -190,7 +190,7 @@ export class GameManager {
                     payload: {
                       message: "pending use set",
                     },
-                  })
+                  }),
                 );
               }
               break;
@@ -222,10 +222,11 @@ export class GameManager {
                       move,
                       turn: game.chess.turn() == "w" ? "b" : "w",
                     },
-                  })
+                  }),
                 ); //TODO: check for if socket is there or not
                 if (game.chess.game_over()) {
                   //TODO: make different message for different types of draw and wins
+                  this.games.delete(user.gameId);
                   const result = game.chess.in_checkmate()
                     ? game.chess.turn() == "b"
                       ? WHITE_WINS
@@ -241,7 +242,7 @@ export class GameManager {
                       payload: {
                         result: result,
                       },
-                    })
+                    }),
                   );
                 }
               }
@@ -271,7 +272,7 @@ export class GameManager {
               otherUser.user.socket.send(
                 JSON.stringify({
                   type: OPPONENT_DISCONNECTED,
-                })
+                }),
               );
             }
           }

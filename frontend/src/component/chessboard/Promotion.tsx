@@ -5,9 +5,8 @@ const Promotion = ({ file, piece, makeMove }: PromotionProps) => {
 
   return (
     <div
-      className={`absolute border-4 border-${
-        file % 2 == 0 ? "dark" : "light"
-      }-tile-highlight z-20 w-[12.5%] aspect-[1/4] grid grid-cols-1 grid-rows-4`}
+      className={`absolute border-4 border-${file % 2 == 0 ? "dark" : "light"
+        }-tile-highlight z-20 w-[12.5%] aspect-[1/4] grid grid-cols-1 grid-rows-4`}
       style={{ left: `${file * 12.5}%` }}
     >
       {optionArr.map((option, index) => {
@@ -15,9 +14,8 @@ const Promotion = ({ file, piece, makeMove }: PromotionProps) => {
         return (
           <div
             key={index}
-            className={`relative w-full h-full row-start-${7 + 1} col-start-${
-              file + 1
-            } ${isBlack ? "bg-dark-tile" : "bg-light-tile"}`}
+            className={`relative w-full h-full row-start-${7 + 1} col-start-${file + 1
+              } ${isBlack ? "bg-dark-tile" : "bg-light-tile"}`}
             onClick={() => {
               makeMove(option as "q" | "n" | "r" | "b");
             }}

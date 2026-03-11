@@ -59,8 +59,6 @@ const ChessBoard = ({
           onMovePieces={(move: { from: Square; to: Square; piece: Piece }) => {
             //TODO: make required changes
             if (isPromotion(move)) {
-              console.log(move);
-
               setPromotion({
                 file: filesArr.indexOf(move.to[0]),
                 from: move.from,

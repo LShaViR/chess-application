@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { ChessInstance } from "chess.js";
 import { Turn } from "../../types/board";
 import { GameStatus } from "../../types/game";
 
@@ -30,7 +29,7 @@ export const gameSlice = createSlice({
         turn: Turn;
         gameStatus: GameStatus;
         gameId: string;
-      }>
+      }>,
     ) => {
       state.value = action.payload;
     },
@@ -38,7 +37,7 @@ export const gameSlice = createSlice({
       state,
       action: PayloadAction<{
         gameStatus: GameStatus;
-      }>
+      }>,
     ) => {
       if (state.value) {
         state.value = { ...state.value, gameStatus: action.payload.gameStatus };

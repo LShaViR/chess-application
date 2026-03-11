@@ -27,8 +27,8 @@ export class Game {
       result == DRAW
         ? GameStatus.draw
         : result == WHITE_WINS
-        ? GameStatus.white
-        : GameStatus.black;
+          ? GameStatus.white
+          : GameStatus.black;
     //TODO: update DB
   }
   move(move: ShortMove) {

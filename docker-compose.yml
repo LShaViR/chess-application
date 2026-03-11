@@ -12,6 +12,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   wss-chess:
+    build:
+      context: ./ws
+      dockerfile: Dockerfile
     image: "wss-chess"
     container_name: "wss-chess-container"
     depends_on:
@@ -22,6 +25,9 @@ services:
       - 8080:8080
 
   backend-chess:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     image: "backend-chess"
     container_name: "backend-chess-container"
     depends_on:

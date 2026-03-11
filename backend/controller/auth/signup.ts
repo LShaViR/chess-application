@@ -4,7 +4,8 @@ import { userSchema } from "../../zod/schema";
 import prisma from "../../db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { jwtSecret } from "../../config";
+
+const jwtSecret = "secretkey";
 
 const signup = async (req: Request, res: Response) => {
   try {
@@ -17,9 +18,9 @@ const signup = async (req: Request, res: Response) => {
       return;
     }
     console.log("signup1");
-    const { email, name, password }: UserSchemaType = body.data;
+    const { username, name, password }: UserSchemaType = body.data;
     console.log("signup2");
-    const user = await prisma.user.findFirst({ where: { email } });
+    const user = await prisma.user.findFirst({ where: { username } });
     if (user) {
       res.send("user already exist");
       return;
@@ -30,19 +31,21 @@ const signup = async (req: Request, res: Response) => {
     const response = await prisma.user.create({
       data: {
         name: name,
-        email: email,
+        username: username,
         password: hashedPassword,
       },
     });
-    console.log("signup5");
+    console.log("signup5", jwtSecret);
 
-    const token = await jwt.sign(
+    const token = jwt.sign(
       { id: response.id, name: response.name },
       jwtSecret,
+      { algorithm: "HS256" },
     );
     res.cookie("userToken", token);
     res.send({ token: token });
   } catch (error) {
+    console.error(error);
     res.send("something went wrong");
   }
 };

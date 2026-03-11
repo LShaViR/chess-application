@@ -1,7 +1,6 @@
 import { Color, ShortMoveType } from "../../../types/board";
 import GameBoard from "./GameBoard";
 import { useEffect, useRef, useState } from "react";
-import { ChessProfileTimer } from "./profileTimer";
 
 export function GameLeftSection({
   onMove,
@@ -42,15 +41,6 @@ export function GameLeftSection({
           <div
             style={{
               width: `${squareSize}px`,
-              height: "50px",
-            }}
-            className={`bg-navbar`}
-          >
-            <ChessProfileTimer />
-          </div>
-          <div
-            style={{
-              width: `${squareSize}px`,
               height: `${squareSize}px`,
             }}
           >
@@ -59,15 +49,6 @@ export function GameLeftSection({
               orientation={turn || Color.WHITE} //TODO: make other state for orientation
               turn={turn || Color.WHITE}
             />
-          </div>
-          <div
-            style={{
-              width: `${squareSize}px`,
-              height: "50px",
-            }}
-            className={`bg-navbar`}
-          >
-            <ChessProfileTimer />
           </div>
         </div>
       </div>

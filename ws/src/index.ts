@@ -4,11 +4,9 @@ import { WebSocketServer, WebSocket } from "ws";
 import http from "http";
 import { GameManager } from "./GameManager";
 import { User } from "./User";
-import url from "url";
 import { extractAuthUser } from "./auth";
 
 const server = http.createServer(function (request: any, response: any) {
-  console.log(new Date() + " Received request for " + request.url);
   response.end("hi there");
 });
 

@@ -1,10 +1,13 @@
 import { useDispatch } from "react-redux";
 import { messageHandler } from "../utils/messageHandler";
 
-const useMessageHandler = (socket: WebSocket) => {
+const useMessageHandler = (socket?: WebSocket | null) => {
   const dispatch = useDispatch();
+  if (!socket) {
+    return;
+  }
   socket.onmessage = async (message) => {
-    await messageHandler(dispatch, message.data);
+    messageHandler(dispatch, message.data);
   };
 
   return messageHandler;

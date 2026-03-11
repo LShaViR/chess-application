@@ -16,7 +16,7 @@ const schema_1 = require("../../zod/schema");
 const db_1 = __importDefault(require("../../db"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = require("../../config");
+const jwtSecret = "secretkey";
 const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = schema_1.userLoginSchema.safeParse(req.body);
@@ -24,8 +24,8 @@ const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.send("wrong input");
             return;
         }
-        const { email, password } = body.data;
-        const user = yield db_1.default.user.findFirst({ where: { email } });
+        const { username, password } = body.data;
+        const user = yield db_1.default.user.findFirst({ where: { username } });
         if (!user) {
             res.status(404).send("user not exist");
             return;
@@ -35,7 +35,9 @@ const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.send("wrong password");
             return;
         }
-        const token = jsonwebtoken_1.default.sign({ id: user.id, name: user.name }, config_1.jwtSecret);
+        const token = jsonwebtoken_1.default.sign({ id: user.id, name: user.name }, jwtSecret, {
+            algorithm: "HS256",
+        });
         res.cookie("userToken", token);
         res.send({ token: token });
     }

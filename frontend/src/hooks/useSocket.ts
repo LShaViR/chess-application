@@ -11,7 +11,6 @@ const useSocket = () => {
     const ws = new WebSocket(`${WS_URL}?token=${token}`);
 
     ws.onopen = () => {
-      console.log("Connection established");
       setSocket(ws);
     };
 

@@ -6,20 +6,49 @@ import { BottomNavbar, SideNavbar } from "../component/navbar";
 import { MOVE } from "../utils/messages";
 import useSocket from "../hooks/useSocket"; //TODO: change code for this
 import RightSection from "../features/game/component/RightSection";
-import GameBoard from "../features/game/component/GameBoard";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { Color, ShortMoveType } from "../types/board";
+import { ShortMoveType } from "../types/board";
 import useMessageHandler from "../features/game/hooks/useMessageHandler";
 import { GameLeftSection } from "../features/game/component/leftGameSection";
+import GameEndPopup from "../features/game/component/GameEndPopup";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { BACKEND_URL } from "../config";
 
+const checkLogin = async () => {
+  const token = localStorage.getItem("tokenChess");
+  if (!token) {
+    throw new Error("token does not exist");
+  }
+  const response = await axios.get(`${BACKEND_URL}/auth/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
 const Game = () => {
   const game = useSelector((state: RootState) => state.game.value);
   const socket = useSocket(); //TODO: make major changes for this
-  if (socket) {
-    //TODO: find better thing for that
-    useMessageHandler(socket);
-  } else {
+  const [user, setUser] = useState<Object | null>(null);
+  useMessageHandler(socket);
+
+  useEffect(() => {
+    checkLogin()
+      .then((response) => {
+        setUser(response);
+      })
+      .catch((_error) => {
+        window.location.href = "/auth";
+      });
+  }, []);
+
+  if (!user) {
+    return <></>;
+  }
+
+  if (!socket) {
     return <></>;
   }
 
@@ -31,10 +60,11 @@ const Game = () => {
       <div className="col-span-21 md:col-span-20 row-span-17 md:row-span-1 flex justify-center overflow-y-scroll relative">
         <div className="lg:grid lg:grid-cols-9 h-full w-full lg:gap-x-3 max-w-4xl">
           <div className="col-span-6 flex justify-center h-full relative">
+            <GameEndPopup />
             <GameLeftSection
               onMove={(move: ShortMoveType) => {
-                console.log(move);
-                console.log("onMove in game");
+                //console.log(move);
+                //console.log("onMove in game");
 
                 socket.send(
                   JSON.stringify({

@@ -20,7 +20,6 @@ export const ChessProfileTimer: React.FC<ChessProfileTimerProps> = ({
   initialTime = 600, // 10:00 in seconds
   avatarUrl,
   color = Color.WHITE,
-  isActive = false,
   onTimeUp,
 }) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
@@ -51,12 +50,13 @@ export const ChessProfileTimer: React.FC<ChessProfileTimerProps> = ({
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const getRatingBars = (rating: number): number => {
+  /*const getRatingBars = (rating: number): number => {
     if (rating >= 2000) return 4;
     if (rating >= 1600) return 3;
     if (rating >= 1200) return 2;
     return 1;
   };
+  */
 
   return (
     <div className=" text-white px-3 py-2 h-full flex items-center justify-between w-full max-w-2xl">

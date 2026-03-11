@@ -1,12 +1,13 @@
 FROM node:20
 
-WORKDIR /app 
+WORKDIR /app
 
-COPY package* .
-
+COPY package.json package-lock.json ./
 RUN npm install
-RUN npm install -g typescript ts-node
-COPY prisma .
+
+COPY prisma ./prisma
+
+COPY db ./db
 
 RUN npx prisma generate
 
@@ -14,6 +15,5 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 3000
+CMD ["npm", "start"]
 
-CMD ["npm", "run", "start"]

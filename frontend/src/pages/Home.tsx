@@ -9,7 +9,7 @@ const Home = () => {
       <div className="hidden lg:block lg:col-span-1 bg-navbar">
         <SideNavbar />
       </div>
-      <div className="hidden lg:block lg:col-span-10 bg-background grid justify-center items-center">
+      <div className="hidden lg:grid lg:col-span-10 bg-background h-full justify-center items-center">
         <img src="/chessBoard.png" alt="" />
       </div>
       <div className="col-span-21 lg:col-span-10 row-span-17 lg:row-span-1 bg-background flex flex-col items-center justify-center p-6">

@@ -6,14 +6,14 @@ import { BottomNavbar, SideNavbar } from "../component/navbar";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    if (!email || !password) {
+    if (!username || !password) {
       alert("Please fill in all fields");
       return;
     }
@@ -23,7 +23,7 @@ export default function Auth() {
     }
     if (isLogin) {
       const response = await axios.post(`${BACKEND_URL}/auth/login`, {
-        email,
+        username,
         password,
       });
       if (response.data.token) {
@@ -38,9 +38,10 @@ export default function Auth() {
     } else {
       const response = await axios.post(`${BACKEND_URL}/auth/signup`, {
         name: name,
-        email: email,
+        username: username,
         password: password,
       });
+      //console.log(response);
       if (response.data.token) {
         localStorage.setItem(
           "tokenChess",
@@ -79,12 +80,12 @@ export default function Auth() {
           )}
           <div className="mb-4">
             <label className="block text-sm font-medium text-placeholder">
-              Email
+              Username
             </label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full p-2 border rounded mt-1 bg-input placeholder:text-placeholder text-white"
               placeholder="email"
             />

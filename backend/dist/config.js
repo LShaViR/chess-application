@@ -8,5 +8,5 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const port = process.env.PORT || 3000;
 exports.port = port;
-const jwtSecret = process.env.JWT_SECRET || "secretkey";
+const jwtSecret = "secretkey";
 exports.jwtSecret = jwtSecret;
