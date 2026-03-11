@@ -8,7 +8,7 @@ const userMe = (req: Request, res: Response) => {
       throw new Error("user not found");
     }
     return res.status(200).json({ user });
-  } catch (error) { }
+  } catch (error) {}
 };
 
 export default userMe;

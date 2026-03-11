@@ -4,8 +4,7 @@ import { userSchema } from "../../zod/schema";
 import prisma from "../../db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
-const jwtSecret = "secretkey";
+import { jwtSecret } from "../../config";
 
 const signup = async (req: Request, res: Response) => {
   try {
@@ -35,7 +34,6 @@ const signup = async (req: Request, res: Response) => {
         password: hashedPassword,
       },
     });
-    console.log("signup5", jwtSecret);
 
     const token = jwt.sign(
       { id: response.id, name: response.name },

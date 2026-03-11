@@ -4,8 +4,7 @@ import { userLoginSchema } from "../../zod/schema";
 import prisma from "../../db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
-const jwtSecret = "secretkey";
+import { jwtSecret } from "../../config";
 
 const userLogin = async (req: Request, res: Response) => {
   try {
