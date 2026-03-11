@@ -5,7 +5,7 @@ import http from "http";
 import { GameManager } from "./GameManager";
 import { User } from "./User";
 import { extractAuthUser } from "./auth";
-import express from "express";
+import express, { Request } from "express";
 
 const app = express();
 const server = http.createServer(app);
@@ -25,7 +25,8 @@ server.on("upgrade", (request, socket, head) => {
 });
 
 wss.on("connection", function connection(ws: WebSocket, req: Request) {
-  const token: string = req.url.split("token=")[1];
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  const token: string = url.searchParams.get("token") || "";
 
   const user = extractAuthUser(token, ws);
 
