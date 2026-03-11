@@ -5,13 +5,24 @@ import http from "http";
 import { GameManager } from "./GameManager";
 import { User } from "./User";
 import { extractAuthUser } from "./auth";
+import express from "express";
 
-const server = http.createServer(function(request: any, response: any) {
-  response.end("hi there");
+const app = express();
+const server = http.createServer(app);
+
+// 1. Initialize WSS WITHOUT the server inside the constructor
+const wss = new WebSocketServer({ noServer: true });
+const gameManager = new GameManager();
+
+app.get("/", (req, res) => {
+  res.send("Server is running");
 });
 
-const wss = new WebSocketServer({ server });
-const gameManager = new GameManager();
+server.on("upgrade", (request, socket, head) => {
+  wss.handleUpgrade(request, socket, head, (ws) => {
+    wss.emit("connection", ws, request);
+  });
+});
 
 wss.on("connection", function connection(ws: WebSocket, req: Request) {
   const token: string = req.url.split("token=")[1];
@@ -23,8 +34,8 @@ wss.on("connection", function connection(ws: WebSocket, req: Request) {
   gameManager.addUser(new User(ws, user));
 });
 
-const port = process.env.PORT || 8080;
 //@ts-ignore
-server.listen(port, "0.0.0.0", function() {
-  console.log(new Date() + `Server is listening on port ${port}`);
+const PORT = process.env.PORT || 8080;
+server.listen(Number(PORT), "0.0.0.0", () => {
+  console.log(`Server is listening on port ${PORT}`);
 });
