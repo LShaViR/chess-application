@@ -6,7 +6,7 @@ import { GameManager } from "./GameManager";
 import { User } from "./User";
 import { extractAuthUser } from "./auth";
 
-const server = http.createServer(function (request: any, response: any) {
+const server = http.createServer(function(request: any, response: any) {
   response.end("hi there");
 });
 
@@ -23,6 +23,8 @@ wss.on("connection", function connection(ws: WebSocket, req: Request) {
   gameManager.addUser(new User(ws, user));
 });
 
-server.listen(process.env.PORT || 8080, function () {
-  console.log(new Date() + " Server is listening on port 8080");
+const port = process.env.PORT || 8080;
+//@ts-ignore
+server.listen(port, "0.0.0.0", function() {
+  console.log(new Date() + `Server is listening on port ${port}`);
 });
