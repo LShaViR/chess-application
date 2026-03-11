@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { User } from "../User";
 import { WebSocket } from "ws";
+import { jwtSecret } from "../config";
 
 export interface userJwtClaims {
   id: string;
